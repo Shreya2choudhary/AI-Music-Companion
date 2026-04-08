@@ -3050,6 +3050,7 @@ function renderNowPlaying() {
       <button class="qc-chip" onclick="rjCommand('Phir se bajao')">Phir se bajao</button>
       <button class="qc-chip qc-dedicate" onclick="rjCommand('Dedicate to someone')">${IC.heart} Dedicate this song</button>
       <button class="qc-chip" onclick="rjCommand('Iska cover version?')">Iska cover version?</button>
+      <button class="qc-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);border-color:var(--primary-30);">Explore more</button>
     </div>
 
     ${FEEDBACK_HTML}
@@ -3201,6 +3202,7 @@ function rjCommand(cmd) {
         <button class="qc-chip" onclick="rjCommand('Next song please')">Next song</button>
         <button class="qc-chip qc-dedicate" onclick="rjCommand('Dedicate to someone')">${IC.heart} Dedicate</button>
         <button class="qc-chip" onclick="endRJSession()">End session</button>
+        <button class="qc-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);border-color:var(--primary-30);">Explore more</button>
       </div>
       ${FEEDBACK_HTML}
     </div></div>`);
@@ -3270,6 +3272,7 @@ function sendDedication(name, initials, color) {
         <button class="qc-chip" onclick="rjCommand('Continue with same RJ')">Continue with RJ ${selectedPersona ? selectedPersona.name : ''}</button>
         <button class="qc-chip" onclick="rjCommand('Kuch Sufi bajao')">More songs</button>
         <button class="qc-chip" onclick="endRJSession()">End session</button>
+        <button class="qc-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);border-color:var(--primary-30);">Explore more</button>
       </div>
       ${FEEDBACK_HTML}
     </div></div>`);
@@ -3285,8 +3288,8 @@ function endRJSession() {
       <div class="ai-text"><p>That's a wrap, Shreya! You listened for ${fmtTime(Math.floor(sessionTime / 10))} today.</p>
       <p style="font-size:12px;color:var(--text-low);margin-top:6px;">No lingering notifications. No daily reminders. I'll be here when you want it.</p></div>
       <div class="quick-cmds mt-8">
-        <button class="qc-chip" onclick="resetAll()">Start fresh</button>
         <button class="qc-chip" onclick="showRJSelect()">Switch RJ</button>
+        <button class="qc-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);border-color:var(--primary-30);">Explore more</button>
       </div>
       ${FEEDBACK_HTML}
     </div></div>`);
@@ -3506,6 +3509,7 @@ function openPodcast(id) {
         <button class="qc-chip" onclick="podcastSaveEpisode()">Save episode</button>
         <button class="qc-chip" onclick="podcastMoreLikeThis()">More like this</button>
         <button class="qc-chip" onclick="backToPodcastList()">Back to list</button>
+        <button class="qc-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);border-color:var(--primary-30);">Explore more</button>
       </div>
 
       ${FEEDBACK_HTML}
@@ -3537,6 +3541,7 @@ function togglePodcast() {
               <button class="qc-chip" onclick="podcastAskQuestion()">Ask about this episode</button>
               <button class="qc-chip" onclick="podcastMoreLikeThis()">Show similar podcasts</button>
               <button class="qc-chip" onclick="void(0)">Keep listening</button>
+              <button class="qc-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);border-color:var(--primary-30);">Explore more</button>
             </div>
           </div></div>`);
         }, 400);
@@ -3658,6 +3663,7 @@ function submitPodcastQuestion(idx) {
         <button class="qc-chip" onclick="podcastAskQuestion()">Ask another question</button>
         <button class="qc-chip" onclick="podcastMoreLikeThis()">More like this</button>
         <button class="qc-chip" onclick="backToPodcastList()">Back to list</button>
+        <button class="qc-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);border-color:var(--primary-30);">Explore more</button>
       </div>
       ${FEEDBACK_HTML}
     </div></div>`);
@@ -3673,6 +3679,7 @@ function podcastSaveEpisode() {
         <button class="qc-chip" onclick="podcastAskQuestion()">Ask about this episode</button>
         <button class="qc-chip" onclick="podcastMoreLikeThis()">More like this</button>
         <button class="qc-chip" onclick="backToPodcastList()">Explore all podcasts</button>
+        <button class="qc-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);border-color:var(--primary-30);">Explore more</button>
       </div>
       ${FEEDBACK_HTML}
     </div></div>`);
