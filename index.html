@@ -1,0 +1,3706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Live Music Companion — JioBharatIQ × JioSaavn</title>
+<style>
+@font-face { font-family: 'JioType'; font-weight: 400; src: url('https://raw.githubusercontent.com/sunit1986/JioBharatIQ_Server/main/assets/fonts/woff2/JioTypeVarW05-Regular.woff2') format('woff2'); }
+@font-face { font-family: 'JioType'; font-weight: 500; src: url('https://raw.githubusercontent.com/sunit1986/JioBharatIQ_Server/main/assets/fonts/woff2/JioTypeW05-Medium.woff2') format('woff2'); }
+@font-face { font-family: 'JioType'; font-weight: 700; src: url('https://raw.githubusercontent.com/sunit1986/JioBharatIQ_Server/main/assets/fonts/woff2/JioTypeW05-Bold.woff2') format('woff2'); }
+@font-face { font-family: 'JioType'; font-weight: 900; src: url('https://raw.githubusercontent.com/sunit1986/JioBharatIQ_Server/main/assets/fonts/woff2/JioTypeW05-Black.woff2') format('woff2'); }
+
+:root {
+  --primary: #3535f3;
+  --primary-light: #e8e8fc;
+  --primary-dark: #3900ad;
+  --secondary: #f7ab20;
+  --sparkle: #1eccb0;
+  --error: #fa2f40;
+  --success: #25ab21;
+  --grey-100: #141414;
+  --grey-80: rgba(0,0,0,0.66);
+  --grey-60: #b5b5b5;
+  --grey-40: #e0e0e0;
+  --grey-20: #f5f5f5;
+  --surface-ghost: #eeeeef;
+  --surface-bold: #3900ad;
+  --white: #ffffff;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 23px;
+  --radius-pill: 999px;
+  --surface-ghost-icon: #e7e9ff;
+  --surface-minimal: #f5f5f6;
+  --surface-moderate: #e3e3e4;
+  --text-high: #0c0d10;
+  --text-low: rgba(25,27,30,0.65);
+  --text-on-bold: #ffffff;
+  --icon-medium: #170054;
+  --icon-high: #0c0d10;
+  --primary-20: #e8e8fc;
+  --primary-30: #9999ff;
+  --primary-50: #3535f3;
+  --primary-60: #000093;
+  --sparkle-20: #e8faf7;
+  --sparkle-30: #a7f6e9;
+  --sparkle-50: #1eccb0;
+  --sparkle-60: #1e7b74;
+  --secondary-20: #fef7e9;
+  --stroke-minimal: rgba(36,38,43,0.13);
+  --shape-pill: 999px;
+  --shape-large: 16px;
+  --shape-medium: 12px;
+  --shape-small: 8px;
+  --shape-4xl: 23px;
+  --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --ease-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --duration-quick: 150ms;
+  --duration-moderate: 250ms;
+  --duration-deliberate: 350ms;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'JioType', sans-serif; background: var(--white); }
+
+.phone-frame {
+  width: 100%; height: 100%; background: var(--white);
+  position: relative; overflow: hidden; display: flex; flex-direction: column;
+}
+
+/* ── Header ── */
+.app-header {
+  height: 56px; padding: 0 16px; display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid var(--grey-40); background: var(--white);
+  position: relative; z-index: 80; flex-shrink: 0;
+}
+.back-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: none; background: transparent;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; color: var(--grey-100); flex-shrink: 0;
+}
+.back-btn:active { transform: scale(0.9); }
+.header-title-area { flex: 1; }
+.header-title { font-size: 16px; font-weight: 500; color: var(--grey-100); line-height: 1; }
+.header-domain { font-size: 12px; color: var(--grey-60); line-height: 1.3; }
+.icon-btn-ghost {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface-ghost); border: none; cursor: pointer; flex-shrink: 0;
+}
+.icon-btn-ghost:active { background: var(--grey-40); }
+.icon-btn-ghost svg { width: 20px; height: 20px; fill: var(--primary-dark); }
+
+/* ── Scrollable content ── */
+.content-area { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
+.content-area::-webkit-scrollbar { width: 0; }
+
+/* ── Chat flow ── */
+.chat-flow { padding: 20px 16px 160px; display: flex; flex-direction: column; gap: 16px; }
+
+/* ── Message rows ── */
+.msg-row { display: flex; gap: 10px; animation: msgIn 0.4s ease-out; }
+.msg-row.user { justify-content: flex-end; }
+
+.ai-avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--primary);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+}
+.ai-dots {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+  width: 14px; height: 14px;
+}
+.ai-dots span { width: 5px; height: 5px; background: white; border-radius: 50%; }
+.ai-avatar video { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+/* ── Feedback row ── */
+.feedback-row { display: flex; gap: 2px; margin-top: 8px; }
+.fb-btn {
+  width: 29px; height: 29px; border-radius: 50%;
+  background: transparent; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.15s;
+}
+.fb-btn:hover { background: var(--surface-ghost); }
+.fb-btn:active { background: var(--grey-40); }
+.fb-btn svg { width: 18px; height: 18px; fill: var(--grey-100); }
+
+.bubble {
+  padding: 12px 16px; font-size: 14px; line-height: 1.55; color: var(--grey-100);
+  max-width: 85%; word-wrap: break-word;
+}
+.bubble-ai {
+  background: var(--surface-ghost);
+  border-radius: 4px var(--radius-lg) var(--radius-lg) var(--radius-lg);
+}
+.bubble-user {
+  background: var(--primary); color: var(--white);
+  border-radius: var(--radius-lg) 4px var(--radius-lg) var(--radius-lg);
+}
+.bubble-ai .sub { color: var(--grey-60); font-size: 12px; margin-top: 4px; display: block; }
+
+/* ── Prompt suggestion cards ── */
+.prompt-section-label {
+  font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--grey-60); margin-bottom: 6px; margin-top: 4px;
+}
+.prompt-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.prompt-card {
+  padding: 14px 16px; border-radius: var(--radius-lg);
+  border: 1.5px solid var(--grey-40); background: var(--white);
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.prompt-card:active { transform: scale(0.98); }
+.prompt-card:hover { border-color: var(--primary); background: var(--primary-light); }
+.prompt-card.selected {
+  border-color: var(--primary); background: var(--primary); pointer-events: none;
+}
+.prompt-card.selected .prompt-text { color: white; }
+.prompt-card.selected .prompt-tag { background: rgba(255,255,255,0.2); color: white; }
+.prompt-card.disabled { opacity: 0.25; pointer-events: none; }
+.prompt-emoji { font-size: 24px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+.prompt-body { flex: 1; min-width: 0; }
+.prompt-text { font-size: 14px; font-weight: 700; color: var(--grey-100); line-height: 1.4; }
+.prompt-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.prompt-tag {
+  padding: 2px 8px; border-radius: var(--radius-pill);
+  background: var(--surface-ghost); font-size: 10px; font-weight: 700;
+  color: var(--grey-60); text-transform: uppercase; letter-spacing: 0.3px;
+}
+
+/* ── "More like this" chips ── */
+.more-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.more-chip {
+  padding: 8px 14px; border-radius: var(--radius-pill);
+  border: 1.5px solid var(--primary); color: var(--primary);
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  background: var(--white); transition: all 0.2s;
+}
+.more-chip:active { transform: scale(0.95); }
+.more-chip:hover { background: var(--primary-light); }
+
+/* ── Processing overlay ── */
+.processing-screen {
+  position: absolute; inset: 0; z-index: 200;
+  background: var(--surface-bold);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.5s;
+}
+.processing-screen.active { opacity: 1; pointer-events: all; }
+.processing-content { text-align: center; color: white; padding: 0 24px; }
+.processing-icon {
+  width: 80px; height: 80px; margin: 0 auto 24px;
+  border-radius: 50%; background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  animation: processPulse 1.5s ease-in-out infinite;
+}
+.processing-icon svg { width: 36px; height: 36px; color: white; }
+.processing-title { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+.processing-sub { font-size: 14px; opacity: 0.7; margin-bottom: 24px; }
+.processing-prompt {
+  font-size: 13px; font-weight: 500; font-style: italic;
+  opacity: 0.9; margin-bottom: 32px; padding: 0 16px;
+  line-height: 1.5;
+}
+.progress-bar-wrap {
+  width: 200px; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.2); margin: 0 auto; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 2px; background: white;
+  width: 0%; transition: width 2.8s ease-in-out;
+}
+
+/* ── Playlist screen ── */
+.playlist-screen {
+  position: absolute; inset: 0; z-index: 100; background: var(--white);
+  transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.playlist-screen.active { transform: translateY(0); }
+
+.playlist-header {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 30;
+  display: flex; justify-content: space-between; align-items: center; padding: 12px 16px;
+}
+.pl-header-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(0,0,0,0.3); backdrop-filter: blur(8px);
+  border: none; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; color: white;
+}
+.pl-header-btn:active { transform: scale(0.9); }
+
+.playlist-cover { position: relative; flex-shrink: 0; }
+.cover-img { width: 100%; height: 240px; object-fit: cover; display: block; }
+.cover-gradient {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+}
+.cover-info { position: absolute; bottom: 20px; left: 20px; right: 80px; color: white; }
+.cover-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 4px;
+  background: var(--sparkle); font-size: 9px; font-weight: 900;
+  color: white; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+}
+.cover-title {
+  font-size: 22px; font-weight: 900; line-height: 1.2;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3); color: white;
+}
+.cover-lang-badge {
+  position: absolute; top: 16px; right: 64px;
+  background: var(--secondary); color: white;
+  font-size: 9px; font-weight: 900; padding: 3px 8px;
+  border-radius: 4px; letter-spacing: 0.3px;
+}
+.cover-actions {
+  position: absolute; bottom: -24px; right: 16px;
+  display: flex; align-items: center; gap: 10px; z-index: 10;
+}
+.action-btn-heart {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: white; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.action-btn-heart svg { width: 24px; height: 24px; color: var(--grey-100); }
+.action-btn-play {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--sparkle); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(30,204,176,0.4);
+}
+.action-btn-play svg { width: 28px; height: 28px; color: white; }
+.action-btn-play:active { transform: scale(0.92); }
+
+.playlist-body { flex: 1; overflow-y: auto; padding: 0 0 200px; }
+.playlist-body::-webkit-scrollbar { width: 0; }
+
+.playlist-meta { padding: 36px 20px 16px; }
+.pl-title { font-size: 24px; font-weight: 900; color: var(--grey-100); line-height: 1.2; }
+.pl-desc { font-size: 13px; color: var(--grey-80); margin-top: 6px; font-weight: 500; }
+.pl-artist-credit { font-size: 12px; color: var(--grey-60); margin-top: 2px; }
+
+/* Powered by JioSaavn badge */
+.powered-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 10px; padding: 4px 10px; border-radius: var(--radius-pill);
+  background: var(--grey-20); font-size: 10px; font-weight: 700;
+  color: var(--grey-60);
+}
+.powered-badge svg { width: 14px; height: 14px; color: var(--sparkle); }
+.powered-badge strong { color: var(--sparkle); font-weight: 900; }
+
+.pl-actions-row {
+  display: flex; align-items: center; gap: 12px; margin-top: 16px;
+  padding-bottom: 16px; border-bottom: 1px solid var(--grey-40);
+}
+.pl-icon-btn {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  border: 1px solid var(--grey-40); background: white; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; color: var(--grey-60);
+}
+.pl-icon-btn:active { background: var(--grey-20); }
+.pl-stats {
+  margin-left: auto; font-size: 11px; color: var(--grey-60);
+  font-weight: 700; display: flex; align-items: center; gap: 6px;
+}
+
+.ai-note {
+  margin: 12px 20px; padding: 12px 14px; border-radius: var(--radius-md);
+  background: var(--surface-ghost);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.ai-note-avatar {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--primary);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.ai-note-avatar .ai-dots { width: 12px; height: 12px; }
+.ai-note-avatar .ai-dots span { width: 4px; height: 4px; }
+.ai-note-text { font-size: 12px; color: var(--grey-80); line-height: 1.5; font-weight: 500; }
+.ai-note-text strong { color: var(--primary); font-weight: 700; }
+
+.track-list { padding: 8px 0; }
+.track-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 20px; cursor: pointer; transition: background 0.15s;
+}
+.track-item:active { background: var(--grey-20); }
+.track-item.active .track-title { color: var(--sparkle); }
+.track-num {
+  width: 20px; font-size: 13px; font-weight: 700;
+  color: var(--grey-60); text-align: center; flex-shrink: 0;
+}
+.track-item.active .track-num { color: var(--sparkle); }
+.track-thumb {
+  width: 48px; height: 48px; border-radius: var(--radius-sm);
+  object-fit: cover; flex-shrink: 0; background: var(--grey-20);
+}
+.track-info { flex: 1; min-width: 0; }
+.track-title {
+  font-size: 14px; font-weight: 700; color: var(--grey-100);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.track-artist {
+  font-size: 12px; color: var(--grey-60); margin-top: 1px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.track-duration { font-size: 11px; color: var(--grey-60); flex-shrink: 0; }
+.track-more {
+  width: 28px; height: 28px; border: none; background: transparent;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--grey-60); flex-shrink: 0;
+}
+
+.mini-player {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 50;
+  background: white; border-top: 1px solid var(--grey-40);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+}
+.mini-player-bar { display: flex; align-items: center; gap: 12px; padding: 10px 16px; }
+.mini-thumb {
+  width: 44px; height: 44px; border-radius: var(--radius-sm);
+  object-fit: cover; flex-shrink: 0;
+}
+.mini-info { flex: 1; min-width: 0; }
+.mini-title {
+  font-size: 13px; font-weight: 700; color: var(--grey-100);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mini-artist {
+  font-size: 11px; color: var(--grey-60);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mini-play {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--grey-100); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: white; flex-shrink: 0;
+}
+.mini-play:active { transform: scale(0.9); }
+.mini-controls { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.mini-ctrl {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: transparent; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--grey-100);
+}
+.mini-ctrl:active { opacity: 0.6; }
+.mini-progress { height: 3px; background: var(--grey-40); }
+.mini-progress-fill { height: 100%; width: 35%; background: var(--sparkle); border-radius: 0 2px 2px 0; }
+
+/* ── Inline Playlist Card (UC2 — JioSaavn style) ── */
+.ipl-card {
+  border-radius: var(--radius-lg); overflow: hidden;
+  background: var(--white); border: 1px solid var(--grey-40);
+  animation: msgIn 0.4s ease-out;
+}
+/* Cover */
+.ipl-cover { position: relative; flex-shrink: 0; }
+.ipl-cover img { width: 100%; height: 200px; object-fit: cover; display: block; }
+.ipl-cover-gradient {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+}
+.ipl-cover-info { position: absolute; bottom: 16px; left: 16px; right: 80px; color: white; }
+.ipl-cover-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--sparkle); color: white; font-size: 9px; font-weight: 900;
+  padding: 3px 8px; border-radius: var(--radius-pill); margin-bottom: 6px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.ipl-cover-title { font-size: 18px; font-weight: 900; line-height: 1.2; }
+.ipl-cover-stats { font-size: 11px; opacity: 0.7; margin-top: 2px; }
+.ipl-cover-lang {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(0,0,0,0.5); color: white; font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: var(--radius-pill);
+}
+.ipl-cover-actions {
+  position: absolute; bottom: 12px; right: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.ipl-heart-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; backdrop-filter: blur(4px);
+}
+.ipl-heart-btn svg { width: 18px; height: 18px; }
+.ipl-heart-btn.liked svg { fill: var(--error); stroke: var(--error); }
+.ipl-play-fab {
+  width: 44px; height: 44px; border-radius: 50%; border: none;
+  background: var(--sparkle); color: var(--grey-100); display: flex;
+  align-items: center; justify-content: center; cursor: pointer;
+}
+.ipl-play-fab svg { width: 22px; height: 22px; }
+/* Meta section */
+.ipl-meta { padding: 12px 16px 8px; }
+.ipl-meta-title { font-size: 16px; font-weight: 900; color: var(--text-high); }
+.ipl-meta-desc { font-size: 12px; color: var(--text-low); margin-top: 2px; line-height: 1.4; }
+.ipl-powered {
+  display: flex; align-items: center; gap: 4px; margin-top: 8px;
+  font-size: 11px; color: var(--text-low);
+}
+.ipl-icon-row {
+  display: flex; align-items: center; gap: 6px; margin-top: 10px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--grey-40);
+}
+.ipl-icon-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  background: var(--grey-20); display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ipl-icon-btn:active { background: var(--grey-40); }
+.ipl-icon-btn svg { stroke: var(--text-high); }
+.ipl-shuffle-btn svg { stroke: var(--sparkle); }
+.ipl-stat-text { margin-left: auto; font-size: 11px; color: var(--text-low); }
+/* Track list */
+.ipl-tracks { padding: 4px 0; }
+.ipl-track {
+  display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+  cursor: pointer; transition: background 0.15s;
+}
+.ipl-track:active { background: var(--grey-20); }
+.ipl-track.playing { background: var(--sparkle-20); }
+.ipl-track.playing .ipl-track-title { color: var(--sparkle-60); font-weight: 700; }
+.ipl-track-num { width: 20px; text-align: center; font-size: 12px; color: var(--text-low); flex-shrink: 0; }
+.ipl-track.playing .ipl-track-num { color: var(--sparkle); }
+.ipl-track-art { width: 44px; height: 44px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
+.ipl-track-info { flex: 1; min-width: 0; }
+.ipl-track-title { font-size: 13px; font-weight: 600; color: var(--text-high); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ipl-track-artist { font-size: 11px; color: var(--text-low); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+.ipl-track-more { border: none; background: none; padding: 4px; cursor: pointer; flex-shrink: 0; }
+/* JioTune boxed icon per track (matches JioSaavn style) */
+.ipl-jiotune {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  cursor: pointer; flex-shrink: 0; padding: 2px 4px;
+}
+.ipl-jiotune span {
+  font-family: 'JioType'; font-size: 8px; font-weight: 700;
+  color: var(--sparkle); letter-spacing: 0.3px;
+}
+.ipl-jiotune:active { opacity: 0.6; }
+/* Share options */
+.ipl-share-opt { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+
+/* Now-playing bar inside the playlist card (sticky bottom) */
+.ipl-now-playing {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; background: var(--surface-ghost);
+  border-top: 1px solid var(--grey-40); position: relative;
+}
+.ipl-np-progress {
+  position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grey-40);
+}
+.ipl-np-progress-fill {
+  height: 100%; width: 35%; background: var(--sparkle);
+  border-radius: 0 1px 1px 0; transition: width 0.3s;
+}
+.ipl-np-art { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+.ipl-np-info { flex: 1; min-width: 0; }
+.ipl-np-title { font-size: 13px; font-weight: 700; color: var(--text-high); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ipl-np-artist { font-size: 11px; color: var(--text-low); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ipl-np-btn {
+  width: 34px; height: 34px; border: none; background: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+/* New tracks animation */
+.ipl-track-new { animation: msgIn 0.4s ease-out; background: var(--sparkle-20); }
+.ipl-track-new:nth-child(n) { animation-delay: 0.1s; }
+
+/* ── Voice Now-Playing Card ── */
+.vnp-card {
+  border-radius: var(--radius-lg); overflow: hidden;
+  background: var(--grey-100); color: white;
+  width: 100%; animation: msgIn 0.4s ease-out;
+}
+.vnp-art { width: 100%; aspect-ratio: 1; position: relative; overflow: hidden; }
+.vnp-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vnp-art-gradient {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%);
+}
+.vnp-art-header {
+  position: absolute; top: 12px; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center; padding: 0 12px;
+}
+.vnp-art-btn {
+  background: rgba(0,0,0,0.4); border: none; border-radius: var(--radius-pill);
+  color: white; padding: 6px 12px; font-family: 'JioType', sans-serif;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  backdrop-filter: blur(8px); display: flex; align-items: center; gap: 5px;
+}
+.vnp-art-btn svg { width: 14px; height: 14px; fill: white; flex-shrink: 0; }
+.vnp-art-btn:active { opacity: 0.7; }
+.vnp-info { padding: 14px 16px 2px; }
+.vnp-title { font-size: 18px; font-weight: 900; color: white; line-height: 1.2; }
+.vnp-artist { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 3px; }
+.vnp-progress-wrap { padding: 12px 16px 0; }
+.vnp-progress-track {
+  height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px;
+  overflow: hidden; cursor: pointer;
+}
+.vnp-progress-fill {
+  height: 100%; background: var(--sparkle); border-radius: 2px;
+  width: 22%; transition: width 1s linear;
+}
+.vnp-time-row {
+  display: flex; justify-content: space-between; margin-top: 5px;
+  font-size: 10px; color: rgba(255,255,255,0.5);
+}
+.vnp-controls {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; padding: 10px 16px 4px;
+}
+.vnp-ctrl {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; color: white;
+}
+.vnp-ctrl svg { width: 22px; height: 22px; fill: white; }
+.vnp-ctrl:active { opacity: 0.6; }
+.vnp-play-btn {
+  width: 56px; height: 56px; border-radius: 50%; background: white;
+  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+}
+.vnp-play-btn svg { width: 28px; height: 28px; fill: var(--grey-100); }
+.vnp-play-btn:active { transform: scale(0.92); }
+.vnp-actions {
+  display: flex; align-items: center; justify-content: space-around;
+  padding: 4px 16px 16px;
+}
+.vnp-act-btn {
+  background: transparent; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.6); display: flex; flex-direction: column;
+  align-items: center; gap: 4px; font-family: 'JioType', sans-serif; font-size: 10px;
+  padding: 6px 4px;
+}
+.vnp-act-btn svg { width: 22px; height: 22px; fill: rgba(255,255,255,0.6); }
+.vnp-act-btn:active { color: white; }
+.vnp-act-btn:active svg { fill: white; }
+.vnp-act-btn.active svg { fill: var(--sparkle); }
+.vnp-act-btn.active { color: var(--sparkle); }
+
+/* Lyrics & Queue panels */
+.vnp-lyrics-panel, .vnp-queue-panel {
+  padding: 0 16px 16px; background: var(--grey-100);
+}
+.vnp-panel-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 0 12px; border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 14px;
+}
+.vnp-mini-art { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+.vnp-panel-back {
+  background: transparent; border: none; color: rgba(255,255,255,0.6);
+  cursor: pointer; padding: 0; font-family: 'JioType', sans-serif; font-size: 12px;
+  flex-shrink: 0;
+}
+.vnp-panel-back:active { color: white; }
+.vnp-lyrics-text {
+  font-size: 15px; line-height: 2; color: rgba(255,255,255,0.45);
+  max-height: 300px; overflow-y: auto; padding-bottom: 8px;
+}
+.vnp-lyrics-text::-webkit-scrollbar { width: 0; }
+.vnp-lyrics-line { padding: 2px 0; transition: all 0.3s; }
+.vnp-lyrics-line.active { color: white; font-weight: 700; font-size: 17px; }
+.vnp-queue-list { max-height: 300px; overflow-y: auto; }
+.vnp-queue-list::-webkit-scrollbar { width: 0; }
+.vnp-queue-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.vnp-queue-item:last-child { border-bottom: none; }
+.vnp-queue-item.playing .vnp-qi-title { color: var(--sparkle); }
+.vnp-qi-num { width: 20px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.35); flex-shrink: 0; }
+.vnp-qi-art { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
+.vnp-qi-info { flex: 1; min-width: 0; }
+.vnp-qi-title {
+  font-size: 13px; font-weight: 700; color: white;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.vnp-qi-artist {
+  font-size: 11px; color: rgba(255,255,255,0.5);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;
+}
+.vnp-qi-dur { font-size: 11px; color: rgba(255,255,255,0.35); flex-shrink: 0; }
+
+/* ── Option chips (like reference) ── */
+.chip-grid { display: flex; flex-direction: column; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 16px; border: 1.5px solid var(--grey-40);
+  border-radius: var(--radius-pill); background: var(--white);
+  font-family: 'JioType', sans-serif; font-size: 14px; font-weight: 500;
+  color: var(--grey-100); cursor: pointer; transition: all 0.15s;
+}
+.chip:active { transform: scale(0.97); }
+.chip:hover { border-color: var(--primary); }
+.chip.selected { background: var(--primary); color: var(--white); border-color: var(--primary); pointer-events: none; }
+.chip.selected svg { fill: var(--white); }
+.chip.disabled { opacity: 0.38; pointer-events: none; }
+.chip svg { fill: var(--icon-medium); flex-shrink: 0; }
+
+.bottom-nav {
+  display: flex; justify-content: space-around; align-items: center;
+  padding: 8px 0 20px; background: white; border-top: 1px solid var(--grey-40);
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 9px; font-weight: 700; color: var(--grey-60);
+  background: none; border: none; cursor: pointer;
+}
+.nav-item.active { color: var(--grey-100); }
+.nav-item svg { width: 22px; height: 22px; }
+
+/* ── Chat mini player (above bottom widget) ── */
+.chat-mini-player {
+  position: absolute; bottom: 84px; left: 0; right: 0; z-index: 65;
+  background: white; border-top: 1px solid var(--grey-40);
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+}
+
+/* ── Voice listening overlay ── */
+.voice-overlay {
+  position: absolute; inset: 0; z-index: 250;
+  background: var(--white); display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.voice-overlay.active { opacity: 1; pointer-events: all; }
+.voice-overlay-content { text-align: center; padding: 0 32px; width: 100%; }
+.voice-mic-ring {
+  width: 100px; height: 100px; border-radius: 50%;
+  border: 3px solid var(--primary); margin: 0 auto 24px;
+  display: flex; align-items: center; justify-content: center;
+  animation: voicePulse 2s ease-in-out infinite;
+}
+.voice-mic-btn {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--surface-bold); display: flex;
+  align-items: center; justify-content: center;
+}
+.voice-status {
+  font-size: 18px; font-weight: 700; color: var(--grey-100); margin-bottom: 8px;
+}
+.voice-transcript {
+  font-size: 16px; font-weight: 500; color: var(--primary);
+  min-height: 24px; margin-bottom: 32px;
+}
+.voice-hint {
+  font-size: 12px; font-weight: 700; color: var(--grey-60);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
+}
+.voice-hint-chips {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+  padding: 0 8px;
+}
+.voice-hint-chip {
+  padding: 8px 14px; border-radius: var(--radius-pill);
+  border: 1.5px solid var(--grey-40); background: var(--white);
+  font-family: 'JioType', sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--grey-100); cursor: pointer; transition: all 0.15s;
+}
+.voice-hint-chip:active { transform: scale(0.95); border-color: var(--primary); }
+.voice-stop-btn {
+  margin-top: 32px; padding: 10px 32px; border-radius: var(--radius-pill);
+  border: 1.5px solid var(--grey-40); background: var(--white);
+  font-family: 'JioType', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--grey-100); cursor: pointer;
+}
+.voice-stop-btn:active { background: var(--surface-ghost); }
+@keyframes voicePulse {
+  0%, 100% { transform: scale(1); border-color: var(--primary); }
+  50% { transform: scale(1.08); border-color: var(--sparkle); }
+}
+
+/* ── Inline voice listening card ── */
+.voice-inline-card {
+  background: var(--surface-ghost); border-radius: var(--radius-lg);
+  padding: 20px 16px; width: 100%;
+}
+.vic-mic-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
+.vic-mic-ring {
+  width: 72px; height: 72px; border-radius: 50%;
+  border: 2.5px solid var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  animation: voicePulse 2s ease-in-out infinite; margin-bottom: 10px;
+}
+.vic-mic-btn {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--surface-bold); border: none;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.vic-mic-btn svg { fill: white; }
+.vic-status { font-size: 15px; font-weight: 700; color: var(--grey-100); }
+.vic-sub { font-size: 12px; color: var(--grey-60); margin-top: 3px; }
+.vic-hint-label {
+  font-size: 10px; font-weight: 900; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--grey-60); margin-bottom: 10px; text-align: center;
+}
+.vic-hints-wrap { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 14px; }
+.vic-cancel-btn {
+  display: block; width: 100%; padding: 10px;
+  border-radius: var(--radius-pill); border: 1.5px solid var(--grey-40);
+  background: white; font-family: 'JioType', sans-serif;
+  font-size: 13px; font-weight: 700; color: var(--grey-60); cursor: pointer;
+}
+.vic-cancel-btn:active { background: var(--surface-ghost); }
+
+/* ── Animations ── */
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes processPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+@keyframes dotBreath {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.25); opacity: 1; }
+}
+.ai-avatar .ai-dots span { animation: dotBreath 3.6s ease-in-out infinite; }
+.ai-avatar .ai-dots span:nth-child(2) { animation-delay: 0.45s; }
+.ai-avatar .ai-dots span:nth-child(3) { animation-delay: 0.9s; }
+.ai-avatar .ai-dots span:nth-child(4) { animation-delay: 1.35s; }
+
+.typing-dots { display: flex; gap: 4px; padding: 4px 0; }
+.typing-dots span {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--grey-60);
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* ── Bottom input bar (JBIQ style) ── */
+.bottom-widget {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 70;
+  padding: 2px 12px 8px; background: var(--white); flex-shrink: 0;
+}
+.bw-container {
+  background: var(--surface-ghost); border-radius: 28px;
+  padding: 4px; display: flex; flex-direction: column;
+}
+.bw-input-label { display: none; }
+.bw-text-input {
+  border: none; outline: none; background: transparent;
+  font-family: 'JioType', sans-serif; font-size: 14px; font-weight: 500;
+  color: var(--text-high); padding: 12px 16px 4px; width: 100%; box-sizing: border-box;
+}
+.bw-text-input::placeholder { color: var(--grey-60); }
+/* Right action button — Speak or Send, same position */
+.bw-action-right {
+  height: 40px; border-radius: var(--radius-pill); border: none;
+  background: var(--surface-bold); color: white; display: flex;
+  align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+  transition: all 0.2s; flex-shrink: 0; padding: 0 16px;
+}
+.bw-action-right svg { fill: white; }
+.bw-action-right.is-send { background: var(--primary); width: 40px; padding: 0; border-radius: 50%; }
+.bw-actions {
+  display: flex; justify-content: space-between; align-items: center;
+  height: 48px; padding: 0 4px;
+}
+.bw-left { display: flex; gap: 2px; }
+.wib {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--primary-light); border: none; cursor: pointer;
+  transition: background 0.15s;
+}
+.wib:active { background: var(--grey-40); }
+.wib svg { width: 20px; height: 20px; fill: var(--primary-dark); }
+.speak-btn { display: none; /* replaced by bw-action-right */ }
+.speak-btn span {
+  font-family: 'JioType', sans-serif; font-weight: 700;
+  font-size: 16px; color: white;
+}
+
+.reset-btn {
+  position: fixed; bottom: 80px; right: 12px; z-index: 999;
+  padding: 6px 12px; border-radius: var(--radius-pill); font-size: 11px;
+  background: var(--grey-100); color: white; border: none;
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  font-family: 'JioType'; opacity: 0.6;
+}
+.reset-btn:hover { opacity: 1; }
+
+/* ═══ RJ & PODCAST COMPONENTS (ported from ai-powered-audio-chat) ═══ */
+.ai-msg { display: flex; gap: 8px; animation: msgIn var(--duration-deliberate) var(--ease-decelerate); }
+.ai-content { flex: 1; max-width: calc(100% - 40px); }
+.ai-text { font-size: 14px; line-height: 1.45; color: var(--text-high); }
+.ai-text p { margin-bottom: 8px; }
+.ai-text p:last-child { margin-bottom: 0; }
+.ai-text strong { font-weight: 600; }
+.user-msg { display: flex; justify-content: flex-end; animation: msgIn var(--duration-deliberate) var(--ease-decelerate); }
+.user-bubble { max-width: 270px; background: var(--surface-ghost); color: var(--text-high); padding: 12px 16px; border-radius: 24px 24px 0 24px; font-size: 14px; line-height: 1.4; }
+.thinking-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; animation: msgIn var(--duration-moderate) var(--ease-decelerate); }
+.mini-avatar { width: 24px; height: 24px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+.mini-avatar video { width: 100%; height: 100%; object-fit: cover; }
+.thinking-text { font-size: 14px; color: var(--text-low); }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.gap-8 { display: flex; flex-direction: column; gap: 8px; }
+.hidden { display: none !important; }
+
+/* Persona cards */
+.persona-card { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: var(--shape-large); border: 1px solid var(--stroke-minimal); background: var(--white); cursor: pointer; transition: all var(--duration-quick) var(--ease-standard); }
+.persona-card:hover { background: var(--surface-ghost); }
+.persona-card:active { transform: scale(0.98); }
+.persona-icon { width: 44px; height: 44px; border-radius: var(--shape-medium); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.persona-icon svg { width: 22px; height: 22px; }
+.persona-info { flex: 1; }
+.persona-name { font-size: 15px; font-weight: 700; color: var(--text-high); line-height: 1.2; }
+.persona-desc { font-size: 12px; color: var(--text-low); margin-top: 2px; }
+.persona-arrow svg { width: 16px; height: 16px; fill: var(--text-low); }
+
+/* Now playing */
+.now-playing { background: var(--white); border: 1px solid var(--stroke-minimal); border-radius: var(--shape-large); padding: 20px; text-align: center; }
+.np-art { width: 80px; height: 80px; border-radius: var(--shape-medium); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; position: relative; }
+.np-art svg { width: 40px; height: 40px; }
+.np-pulse { position: absolute; inset: -6px; border-radius: 50%; border: 2px solid; opacity: 0.3; animation: npPulse 2s ease-in-out infinite; }
+@keyframes npPulse { 0%,100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.1; } }
+.np-title { font-size: 16px; font-weight: 700; color: var(--text-high); }
+.np-artist { font-size: 13px; color: var(--text-low); margin-top: 2px; }
+.np-complete { animation: npComplete 0.6s ease; }
+@keyframes npComplete { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+.np-progress { margin: 14px 0 12px; }
+.np-bar-bg { height: 3px; background: var(--surface-moderate); border-radius: 2px; overflow: hidden; }
+.np-bar-fill { height: 100%; background: var(--primary-50); border-radius: 2px; transition: width 0.1s linear; }
+.np-time { display: flex; justify-content: space-between; margin-top: 4px; }
+.np-time span { font-size: 11px; color: var(--text-low); font-variant-numeric: tabular-nums; }
+.np-controls { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 12px; }
+.ctrl-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--surface-ghost); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.ctrl-btn:active { background: var(--surface-moderate); }
+.ctrl-btn svg { width: 20px; height: 20px; fill: var(--text-high); }
+.ctrl-btn-main { width: 48px; height: 48px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.ctrl-btn-main:active { opacity: 0.85; }
+.ctrl-btn-main svg { width: 22px; height: 22px; fill: var(--text-on-bold); }
+.rj-badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--surface-ghost); border-radius: var(--shape-small); }
+.rj-badge-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.rj-badge-name { font-size: 12px; font-weight: 600; color: var(--text-high); }
+.rj-badge-time { font-size: 11px; color: var(--text-low); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+/* Interlude */
+.interlude-card { background: var(--surface-minimal); border: 1px solid var(--stroke-minimal); border-radius: var(--shape-large); padding: 16px; }
+.interlude-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.interlude-header .il-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; animation: npPulse 2s infinite; }
+.interlude-header .il-label { font-size: 12px; font-weight: 700; color: var(--text-high); }
+.interlude-text { font-size: 13px; color: var(--text-high); line-height: 1.5; margin-bottom: 12px; }
+.interlude-actions { display: flex; gap: 8px; }
+.il-btn-primary { padding: 10px 16px; border-radius: var(--shape-pill); border: none; color: white; font-family: 'JioType', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; }
+.il-btn-primary:active { opacity: 0.85; }
+.il-btn-secondary { padding: 10px 16px; border-radius: var(--shape-pill); border: 1px solid var(--stroke-minimal); background: var(--white); font-family: 'JioType', sans-serif; font-size: 13px; font-weight: 500; color: var(--text-high); cursor: pointer; }
+.il-btn-secondary:active { background: var(--surface-ghost); }
+
+/* Quick commands */
+.quick-cmds { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.qc-chip { padding: 8px 14px; border-radius: var(--shape-pill); border: 1px solid var(--stroke-minimal); background: var(--white); font-family: 'JioType', sans-serif; font-size: 12px; font-weight: 500; color: var(--text-high); cursor: pointer; transition: all var(--duration-quick) var(--ease-standard); display: inline-flex; align-items: center; gap: 4px; }
+.qc-chip:active { background: var(--surface-ghost); }
+.qc-dedicate { border-color: var(--sparkle-50); color: var(--sparkle-60); }
+.qc-dedicate svg { width: 14px; height: 14px; fill: var(--sparkle-50); }
+.rj-response { font-size: 14px; color: var(--text-high); line-height: 1.5; padding: 12px 0; font-style: italic; }
+
+/* Podcast cards */
+.podcast-card { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: var(--shape-large); border: 1px solid var(--stroke-minimal); background: var(--white); cursor: pointer; transition: all var(--duration-quick) var(--ease-standard); }
+.podcast-card:hover { background: var(--surface-ghost); }
+.podcast-card:active { transform: scale(0.98); }
+.podcast-icon { width: 44px; height: 44px; border-radius: var(--shape-medium); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.podcast-icon svg { width: 22px; height: 22px; }
+.podcast-info { flex: 1; }
+.podcast-title { font-size: 14px; font-weight: 700; color: var(--text-high); line-height: 1.2; }
+.podcast-meta { font-size: 11px; color: var(--text-low); margin-top: 2px; }
+.podcast-arrow svg { width: 16px; height: 16px; fill: var(--text-low); }
+
+/* Podcast player */
+.podcast-player { background: var(--white); border: 1px solid var(--stroke-minimal); border-radius: var(--shape-large); padding: 20px; }
+.pp-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.pp-art { width: 56px; height: 56px; border-radius: var(--shape-medium); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pp-art svg { width: 28px; height: 28px; }
+.pp-title { font-size: 16px; font-weight: 700; color: var(--text-high); line-height: 1.2; }
+.pp-meta { font-size: 12px; color: var(--text-low); margin-top: 2px; }
+.pp-episode { font-size: 11px; font-weight: 500; margin-top: 3px; }
+
+/* QA section */
+.qa-section { margin-top: 8px; }
+.qa-trigger { width: 100%; padding: 12px 16px; border-radius: var(--shape-large); border: 1.5px dashed var(--primary-30); background: var(--primary-20); display: flex; align-items: center; gap: 8px; font-family: 'JioType', sans-serif; font-size: 13px; font-weight: 500; color: var(--primary-50); cursor: pointer; }
+.qa-trigger svg { width: 18px; height: 18px; fill: var(--primary-50); }
+.qa-panel { background: var(--primary-20); border-radius: var(--shape-large); padding: 14px; }
+.qa-label { font-size: 12px; font-weight: 700; color: var(--primary-50); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.qa-label svg { width: 16px; height: 16px; fill: var(--primary-50); }
+.qa-input-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.qa-input { flex: 1; padding: 10px 12px; border-radius: var(--shape-small); border: 1px solid var(--stroke-minimal); font-family: 'JioType', sans-serif; font-size: 13px; background: var(--white); }
+.qa-input:focus { border-color: var(--primary-50); outline: none; }
+.qa-send { padding: 10px 16px; border-radius: var(--shape-small); border: none; background: var(--primary-50); color: white; font-family: 'JioType', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; }
+.qa-send:active { opacity: 0.85; }
+.qa-answer { font-size: 13px; color: var(--text-high); line-height: 1.5; padding: 12px; background: var(--white); border-radius: var(--shape-small); border: 1px solid var(--stroke-minimal); }
+.qa-answer-note { font-size: 10px; color: var(--text-low); margin-top: 6px; }
+
+/* Recommendation card */
+.rec-card { background: var(--sparkle-20); border-radius: var(--shape-large); padding: 14px; border: 1px solid rgba(30,204,176,0.2); }
+.rec-label { font-size: 11px; font-weight: 700; color: var(--sparkle-60); margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+.rec-label svg { width: 14px; height: 14px; fill: var(--sparkle-60); }
+.rec-text { font-size: 13px; color: var(--text-high); line-height: 1.4; }
+.rec-note { font-size: 10px; color: var(--text-low); margin-top: 6px; }
+
+/* Preferences */
+.pref-section { margin-bottom: 16px; }
+.pref-label { font-size: 12px; font-weight: 700; color: var(--text-high); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.pref-label svg { width: 16px; height: 16px; fill: var(--icon-medium); }
+.pref-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.pref-chip { padding: 8px 14px; border-radius: var(--shape-pill); border: 1px solid var(--stroke-minimal); background: var(--white); font-family: 'JioType', sans-serif; font-size: 12px; font-weight: 500; color: var(--text-high); cursor: pointer; }
+.pref-chip.selected { background: var(--grey-100); border-color: var(--grey-100); color: var(--white); }
+.pref-chip:active { background: var(--surface-ghost); }
+.pref-slider-wrap { padding: 0 4px; }
+.pref-slider { width: 100%; height: 4px; -webkit-appearance: none; appearance: none; border-radius: 2px; outline: none; }
+.pref-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--primary-50); cursor: pointer; border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+.pref-slider-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 11px; color: var(--text-low); }
+.pref-slider-value { font-weight: 700; color: var(--primary-50); }
+.pref-apply { width: 100%; padding: 14px; border-radius: var(--shape-pill); border: none; background: var(--surface-bold); color: var(--text-on-bold); font-family: 'JioType', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; }
+.pref-apply:active { opacity: 0.85; }
+.pref-apply svg { width: 18px; height: 18px; fill: var(--text-on-bold); }
+.pref-summary { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pref-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--shape-pill); background: var(--surface-ghost); font-size: 11px; font-weight: 500; color: var(--text-high); }
+.pref-tag svg { width: 12px; height: 12px; fill: var(--icon-medium); }
+
+/* Language filter */
+.lang-filter { display: flex; gap: 6px; flex-wrap: wrap; }
+.lang-btn { padding: 6px 14px; border-radius: var(--shape-pill); border: 1px solid var(--stroke-minimal); background: var(--white); font-family: 'JioType', sans-serif; font-size: 12px; font-weight: 500; color: var(--text-high); cursor: pointer; }
+.lang-btn.active { background: var(--grey-100); border-color: var(--grey-100); color: var(--white); }
+
+/* Tradeoff box */
+.tradeoff-box { background: var(--surface-minimal); border-radius: var(--shape-medium); padding: 12px; }
+.tradeoff-label { font-size: 11px; font-weight: 700; color: var(--primary-50); margin-bottom: 6px; }
+.tradeoff-item { font-size: 11px; color: var(--text-low); line-height: 1.5; margin-bottom: 2px; }
+
+/* Share button */
+.share-btn-wa { width: 100%; padding: 12px; border-radius: var(--shape-pill); border: none; background: #25D366; color: var(--white); font-family: 'JioType', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.share-btn-wa:active { opacity: 0.85; }
+.share-btn-wa svg { width: 18px; height: 18px; fill: var(--white); }
+.btn-ghost { display: flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: var(--shape-pill); border: 1px solid var(--stroke-minimal); background: var(--white); font-family: 'JioType', sans-serif; font-size: 13px; font-weight: 500; color: var(--primary-50); cursor: pointer; }
+.btn-ghost svg { width: 16px; height: 16px; fill: var(--primary-50); }
+
+/* Contact cards (dedication) */
+.contact-list { display: flex; flex-direction: column; gap: 4px; }
+.contact-card { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--shape-medium); border: 1px solid var(--stroke-minimal); background: var(--white); cursor: pointer; transition: all var(--duration-quick) var(--ease-standard); }
+.contact-card:hover { background: var(--surface-ghost); }
+.contact-card:active { transform: scale(0.98); }
+.contact-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.contact-info { flex: 1; }
+.contact-name { font-size: 14px; font-weight: 600; color: var(--text-high); }
+.contact-phone { font-size: 12px; color: var(--text-low); }
+.contact-send-icon svg { width: 18px; height: 18px; fill: var(--primary-50); }
+
+/* Dedication hero card */
+.ded-card-hero { background: var(--sparkle-20); border-radius: var(--shape-large); padding: 16px; border: 1px solid rgba(30,204,176,0.2); }
+.ded-hero-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.ded-hero-icon svg { width: 24px; height: 24px; fill: var(--sparkle-50); }
+.ded-hero-title { font-size: 15px; font-weight: 700; color: var(--text-high); }
+.ded-hero-subtitle { font-size: 12px; color: var(--text-low); }
+.ded-hero-body { margin-top: 8px; }
+.ded-hero-song { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--white); border-radius: var(--shape-small); margin-bottom: 10px; }
+.ded-song-art { width: 40px; height: 40px; border-radius: var(--shape-small); background: var(--primary-20); display: flex; align-items: center; justify-content: center; }
+.ded-song-art svg { width: 20px; height: 20px; fill: var(--primary-50); }
+.ded-song-name { font-size: 14px; font-weight: 700; color: var(--text-high); }
+.ded-song-artist { font-size: 12px; color: var(--text-low); }
+.ded-msg { font-size: 13px; color: var(--text-high); line-height: 1.5; font-style: italic; margin-bottom: 12px; }
+.ded-share-row { display: flex; gap: 8px; }
+.ded-play-btn { flex: 1; padding: 10px; border-radius: var(--shape-pill); border: 1px solid var(--stroke-minimal); background: var(--white); font-family: 'JioType', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-high); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.ded-play-btn svg { width: 14px; height: 14px; fill: var(--text-high); }
+.ded-share-wa { flex: 1; padding: 10px; border-radius: var(--shape-pill); border: none; background: #25D366; font-family: 'JioType', sans-serif; font-size: 12px; font-weight: 600; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.ded-share-wa svg { width: 14px; height: 14px; fill: white; }
+
+/* Chip row for source compat */
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame" id="app">
+
+  <!-- ═══ MAIN CHAT SCREEN ═══ -->
+  <div class="app-header" id="chatHeader">
+    <button class="back-btn" onclick="window.history.back()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    </button>
+    <div class="header-title-area">
+      <div class="header-title">Live Music Companion</div>
+      <div class="header-domain">Entertainment</div>
+    </div>
+    <button class="icon-btn-ghost">
+      <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 000-1.42l-2.34-2.34a1.003 1.003 0 00-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/></svg>
+    </button>
+  </div>
+
+  <div class="content-area" id="contentArea">
+    <div class="chat-flow" id="chatFlow">
+
+      <!-- Welcome message with option chips -->
+      <div class="msg-row" id="welcomeMsg">
+        <div class="ai-avatar">
+          <video autoplay loop muted playsinline><source src="https://sunit1986.github.io/design-prototypes/Assets/HelloJio_Listening_241.mp4" type="video/mp4"></video>
+        </div>
+        <div style="flex:1;">
+          <div class="bubble bubble-ai" style="max-width:100%;">
+            <p>Hello, Shreya! I'm your AI music companion. What would you like to explore today?</p>
+          </div>
+          <div class="chip-grid" id="mainOptions" style="margin-top:10px;">
+            <button class="chip" onclick="selectMainOption(this, 'voice')">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 15a3 3 0 003-3V5a3 3 0 00-6 0v7a3 3 0 003 3zm6-5a1 1 0 00-1 1v1a5 5 0 11-10 0v-1a1 1 0 10-2 0v1a7 7 0 1014 0v-1a1 1 0 00-1-1zm-3 10H9a1 1 0 000 2h6a1 1 0 000-2z" fill="currentColor"/></svg>
+              <span>Play a Song</span>
+            </button>
+            <button class="chip" onclick="selectMainOption(this, 'prompt')">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M15 4H9a7 7 0 00-1 13.92V20a1.5 1.5 0 002.4 1.2l4.27-3.2H15a7 7 0 000-14zm-7 8a1 1 0 110-2 1 1 0 010 2zm4 0a1 1 0 110-2 1 1 0 010 2zm4 0a1 1 0 110-2 1 1 0 010 2z" fill="currentColor"/></svg>
+              <span>Pick or Describe your Vibe</span>
+            </button>
+            <button class="chip" onclick="selectMainOption(this, 'rj')">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" fill="currentColor"/></svg>
+              <span>AI Personal RJ</span>
+            </button>
+            <button class="chip" onclick="selectMainOption(this, 'podcast')">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z" fill="currentColor"/></svg>
+              <span>Podcast Factory</span>
+            </button>
+          </div>
+          <div class="feedback-row" id="welcomeFeedback">
+            <button class="fb-btn"><svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg></button>
+            <button class="fb-btn"><svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg></button>
+            <button class="fb-btn"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button>
+            <button class="fb-btn"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ CHAT MINI PLAYER (for voice playback, outside playlist screen) ═══ -->
+  <div class="chat-mini-player" id="chatMiniPlayer" style="display:none;">
+    <div class="mini-progress"><div class="mini-progress-fill"></div></div>
+    <div class="mini-player-bar">
+      <img class="mini-thumb" id="chatMiniThumb" src="" alt="">
+      <div class="mini-info">
+        <div class="mini-title" id="chatMiniTitle"></div>
+        <div class="mini-artist" id="chatMiniArtist"></div>
+      </div>
+      <div class="mini-controls">
+        <button class="mini-ctrl" onclick="voiceSkip(-1)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button class="mini-play" id="chatMiniPlayBtn" onclick="toggleChatMiniPlay()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+        </button>
+        <button class="mini-ctrl" onclick="voiceSkip(1)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BOTTOM INPUT BAR ═══ -->
+  <div class="bottom-widget" id="bottomBar">
+    <div class="bw-container">
+      <input class="bw-text-input" id="chatTextInput" type="text" placeholder="Ask anything.." autocomplete="off"
+        onkeydown="if(event.key==='Enter' && this.value.trim()) handleTextSend()"
+        oninput="toggleInputAction()">
+      <div class="bw-actions">
+        <div class="bw-left">
+          <button class="wib"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+          <button class="wib" id="dictateBtn" onclick="startDictation()"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 003-3V5a3 3 0 00-6 0v7a3 3 0 003 3zm6-5a1 1 0 00-1 1v1a5 5 0 11-10 0v-1a1 1 0 10-2 0v1a7 7 0 1014 0v-1a1 1 0 00-1-1zm-3 10H9a1 1 0 000 2h6a1 1 0 000-2z" fill="currentColor"/></svg></button>
+        </div>
+        <!-- Speak (default) / Send (when typing) — same position -->
+        <button class="bw-action-right" id="bwActionRight" onclick="handleActionRight()">
+          <svg id="bwIconSpeak" viewBox="0 0 24 24" width="18" height="18"><path d="M12 2a1 1 0 00-1 1v18a1 1 0 002 0V3a1 1 0 00-1-1zM4 9a1 1 0 00-1 1v4a1 1 0 102 0v-4a1 1 0 00-1-1zm4-3a1 1 0 00-1 1v10a1 1 0 102 0V7a1 1 0 00-1-1zm12 3a1 1 0 00-1 1v4a1 1 0 002 0v-4a1 1 0 00-1-1zm-4-3a1 1 0 00-1 1v10a1 1 0 002 0V7a1 1 0 00-1-1z" fill="white"/></svg>
+          <span id="bwSpeakLabel" style="font-family:'JioType';font-size:13px;font-weight:700;color:white;">Speak</span>
+          <svg id="bwIconSend" viewBox="0 0 24 24" width="20" height="20" style="display:none"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="white"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ VOICE LISTENING OVERLAY ═══ -->
+  <div class="voice-overlay" id="voiceOverlay">
+    <div class="voice-overlay-content">
+      <div class="voice-mic-ring" id="voiceMicRing">
+        <div class="voice-mic-btn" id="voiceMicBtn">
+          <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 15a3 3 0 003-3V5a3 3 0 00-6 0v7a3 3 0 003 3zm6-5a1 1 0 00-1 1v1a5 5 0 11-10 0v-1a1 1 0 10-2 0v1a7 7 0 1014 0v-1a1 1 0 00-1-1zm-3 10H9a1 1 0 000 2h6a1 1 0 000-2z" fill="white"/></svg>
+        </div>
+      </div>
+      <div class="voice-status" id="voiceStatus">Listening...</div>
+      <div class="voice-transcript" id="voiceTranscript"></div>
+      <div class="voice-hint">Try saying:</div>
+      <div class="voice-hint-chips" id="voiceHintChips"></div>
+      <button class="voice-stop-btn" onclick="cancelVoice()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ═══ PROCESSING OVERLAY ═══ -->
+  <div class="processing-screen" id="processingScreen">
+    <div class="processing-content">
+      <div class="processing-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <div class="processing-title">Curating your playlist...</div>
+      <div class="processing-sub">Searching 80M+ tracks with mood & context analysis</div>
+      <div class="processing-prompt" id="processingPrompt"></div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PLAYLIST SCREEN ═══ -->
+  <div class="playlist-screen" id="playlistScreen">
+    <div class="playlist-header">
+      <button class="pl-header-btn" onclick="closePlaylist()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="pl-header-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+      </button>
+    </div>
+
+    <div class="playlist-cover">
+      <img class="cover-img" id="coverImg" src="" alt="Playlist cover">
+      <div class="cover-gradient"></div>
+      <div class="cover-info">
+        <div class="cover-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13M6 18a3 3 0 100-6 3 3 0 000 6zM18 16a3 3 0 100-6 3 3 0 000 6z"/></svg>
+          AI Curated
+        </div>
+        <div class="cover-title" id="coverTitle"></div>
+      </div>
+      <div class="cover-lang-badge" id="coverLang"></div>
+      <div class="cover-actions">
+        <button class="action-btn-heart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        </button>
+        <button class="action-btn-play" id="playAllBtn" onclick="togglePlayAll()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="playlist-body" id="playlistBody">
+      <div class="playlist-meta">
+        <div class="pl-title" id="plTitle"></div>
+        <div class="pl-desc" id="plDesc"></div>
+        <div class="pl-artist-credit" id="plCredit"></div>
+        <div class="powered-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          Powered by <strong>JioSaavn</strong>
+        </div>
+        <div class="pl-actions-row">
+          <button class="pl-icon-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+          <button class="pl-icon-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </button>
+          <div class="pl-stats">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            <span id="plStats"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-note">
+        <div class="ai-note-avatar">
+          <div class="ai-dots"><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="ai-note-text" id="aiNoteText"></div>
+      </div>
+
+      <div class="track-list" id="trackList"></div>
+    </div>
+
+    <div class="mini-player" id="miniPlayer" style="display:none;">
+      <div class="mini-progress"><div class="mini-progress-fill"></div></div>
+      <div class="mini-player-bar">
+        <img class="mini-thumb" id="miniThumb" src="" alt="">
+        <div class="mini-info">
+          <div class="mini-title" id="miniTitle"></div>
+          <div class="mini-artist" id="miniArtist"></div>
+        </div>
+        <div class="mini-controls">
+          <button class="mini-ctrl" onclick="skipTrack(-1)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+          <button class="mini-play" id="miniPlayBtn" onclick="toggleMiniPlay()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+          </button>
+          <button class="mini-ctrl" onclick="skipTrack(1)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </button>
+      <button class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        For You
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        My Library
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Pro
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<button class="reset-btn" onclick="resetAll()">&#8634; Reset Demo</button>
+
+<script>
+// ── State ──
+let isPlaying = false;
+
+// ── Audio player ──
+const audioPlayer = new Audio();
+audioPlayer.volume = 1;
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+// Live progress update — syncs both UC1 now-playing card and UC2 mini-player
+audioPlayer.addEventListener('timeupdate', () => {
+  const cur = audioPlayer.currentTime;
+  const dur = audioPlayer.duration || 0;
+  const pct = dur > 0 ? (cur / dur * 100) : 0;
+
+  // UC1 now-playing card
+  const vnpTime = document.getElementById('vnpTimeCurrent');
+  const vnpFill = document.getElementById('vnpProgressFill');
+  if (vnpTime) vnpTime.textContent = formatTime(cur);
+  if (vnpFill) vnpFill.style.width = pct + '%';
+
+  // UC2 inline playlist mini-player
+  const iplFill = document.querySelector('.ipl-np-progress-fill');
+  if (iplFill) iplFill.style.width = pct + '%';
+});
+
+// When audio duration loads, update the displayed total time
+audioPlayer.addEventListener('loadedmetadata', () => {
+  const vnpDur = document.getElementById('vnpTimeDuration');
+  if (vnpDur) vnpDur.textContent = formatTime(audioPlayer.duration);
+});
+
+function playSongAudio(track) {
+  if (track && track.audio) {
+    audioPlayer.src = track.audio;
+    audioPlayer.play().catch(() => {});
+  } else {
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+  }
+}
+
+function pauseSongAudio() {
+  audioPlayer.pause();
+}
+
+function resumeSongAudio() {
+  if (audioPlayer.src) audioPlayer.play().catch(() => {});
+}
+
+// ── Natural language prompt suggestions ──
+const promptSuggestions = [
+  {
+    id: 'rainy-drive',
+    emoji: '🌧️',
+    text: 'Songs for a rainy evening drive',
+    tags: [],
+    playlist: {
+      cover: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&q=80&w=800',
+      title: 'Monsoon Drive Melodies',
+      lang: 'Hindi',
+      desc: 'Handpicked retro & modern Hindi hits for your rainy evening drive.',
+      credit: 'Monsoon vibes',
+      stats: '1h 45m \u2022 12 Songs \u2022 AI Curated',
+      aiNote: 'I curated this based on <strong>rainy evening drive</strong> \u2014 soulful retro classics blended with modern ballads. Slow-to-mid tempo, rich melodies, and that unmistakable monsoon nostalgia.',
+      tracks: [
+        { title:'Bheegi Bheegi Raaton Mein', artist:'Kishore Kumar, Lata Mangeshkar', dur:'4:32', img:'https://images.unsplash.com/photo-1501999635878-71cb5379c2d8?w=200&h=200&fit=crop&auto=format' },
+        { title:'Rimjhim Gire Sawan', artist:'Kishore Kumar', dur:'5:01', img:'https://images.unsplash.com/photo-1438449805896-28a666819a20?w=200&h=200&fit=crop&auto=format' },
+        { title:'Tip Tip Barsa Paani', artist:'Alka Yagnik, Udit Narayan', dur:'5:28', img:'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=200&h=200&fit=crop&auto=format' },
+        { title:'Tum Hi Ho', artist:'Arijit Singh', dur:'4:22', img:'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200&h=200&fit=crop&auto=format' },
+        { title:'Lag Jaa Gale', artist:'Lata Mangeshkar', dur:'3:48', img:'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=200&h=200&fit=crop&auto=format', audio:'lag-jaa-gale.mp3' },
+        { title:'Kal Ho Naa Ho', artist:'Sonu Nigam', dur:'5:17', img:'https://images.unsplash.com/photo-1476842634003-7dcca8f832de?w=200&h=200&fit=crop&auto=format' },
+        { title:'Tujhe Kitna Chahne Lage', artist:'Arijit Singh', dur:'4:45', img:'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=200&h=200&fit=crop&auto=format' },
+        { title:'Pehla Nasha', artist:'Udit Narayan, Sadhana Sargam', dur:'5:04', img:'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=200&h=200&fit=crop&auto=format' },
+        { title:'Kabira', artist:'Arijit Singh, Tochi Raina', dur:'3:55', img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=200&h=200&fit=crop&auto=format' },
+        { title:'Channa Mereya', artist:'Arijit Singh', dur:'4:50', img:'https://images.unsplash.com/photo-1519741497674-611481863552?w=200&h=200&fit=crop&auto=format', audio:'channa-mereya.mp3' },
+        { title:'Ilahi', artist:'Arijit Singh', dur:'3:34', img:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=200&h=200&fit=crop&auto=format' },
+        { title:'Ae Dil Hai Mushkil', artist:'Arijit Singh', dur:'4:29', img:'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200&h=200&fit=crop&auto=format' },
+      ]
+    }
+  },
+  {
+    id: 'punjabi-party',
+    emoji: '🎉',
+    text: 'Upbeat Punjabi tracks for a house party',
+    tags: [],
+    playlist: {
+      cover: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800',
+      title: 'Punjabi Party Anthems',
+      lang: 'Punjabi',
+      desc: 'Bass-heavy Punjabi bangers to get the whole party on their feet.',
+      credit: 'Turn it up!',
+      stats: '1h 30m \u2022 10 Songs \u2022 AI Curated',
+      aiNote: 'All <strong>high-energy Punjabi</strong> \u2014 bass drops, dhol beats, and tracks everyone knows the lyrics to. Perfect for keeping the dance floor packed!',
+      tracks: [
+        { title:'Excuses', artist:'AP Dhillon, Gurinder Gill', dur:'3:24', img:'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=200&h=200&fit=crop&auto=format' },
+        { title:'Brown Munde', artist:'AP Dhillon', dur:'3:38', img:'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=200&h=200&fit=crop&auto=format' },
+        { title:'Mundian To Bach Ke', artist:'Panjabi MC', dur:'4:12', img:'https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=200&h=200&fit=crop&auto=format' },
+        { title:'Amplifier', artist:'Imran Khan', dur:'4:05', img:'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=200&h=200&fit=crop&auto=format' },
+        { title:'Leja Re', artist:'Dhvani Bhanushali', dur:'3:45', img:'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=200&h=200&fit=crop&auto=format' },
+        { title:'Kala Chashma', artist:'Badshah, Neha Kakkar', dur:'4:18', img:'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&h=200&fit=crop&auto=format' },
+        { title:'Diljit Dosanjh Medley', artist:'Diljit Dosanjh', dur:'5:30', img:'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=200&h=200&fit=crop&auto=format' },
+        { title:'London Thumakda', artist:'Labh Janjua, Sonu Kakkar', dur:'3:52', img:'https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=200&h=200&fit=crop&auto=format' },
+        { title:'Yaar Ni Milya', artist:'Hardy Sandhu', dur:'3:20', img:'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=200&h=200&fit=crop&auto=format' },
+        { title:'Pasoori', artist:'Ali Sethi, Shae Gill', dur:'3:58', img:'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=200&h=200&fit=crop&auto=format' },
+      ]
+    }
+  },
+  {
+    id: 'sufi-night',
+    emoji: '🌙',
+    text: 'Sufi and soulful tracks for a quiet late night',
+    tags: [],
+    playlist: {
+      cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800',
+      title: 'Midnight Sufi Sessions',
+      lang: 'Hindi',
+      desc: 'Soulful qawwalis and Sufi rock for the quiet hours.',
+      credit: 'For nights that need depth',
+      stats: '2h 10m \u2022 10 Songs \u2022 AI Curated',
+      aiNote: 'Deep <strong>Sufi & soulful</strong> picks for your late night \u2014 from Nusrat saab to A.R. Rahman\'s masterpieces. Let these melodies carry you through the quiet hours.',
+      tracks: [
+        { title:'Kun Faya Kun', artist:'A.R. Rahman, Javed Ali', dur:'7:52', img:'https://images.unsplash.com/photo-1564769625905-50e93615e769?w=200&h=200&fit=crop&auto=format' },
+        { title:'Khwaja Mere Khwaja', artist:'A.R. Rahman', dur:'6:31', img:'https://images.unsplash.com/photo-1590076215667-875c2d3faf24?w=200&h=200&fit=crop&auto=format' },
+        { title:'Afreen Afreen', artist:'Rahat Fateh Ali Khan', dur:'5:42', img:'https://images.unsplash.com/photo-1532978379173-523e16f371f2?w=200&h=200&fit=crop&auto=format' },
+        { title:'Tera Ban Jaunga', artist:'Akhil Sachdeva, Tulsi Kumar', dur:'3:56', img:'https://images.unsplash.com/photo-1507400492013-162706c8c05e?w=200&h=200&fit=crop&auto=format' },
+        { title:'Bulleya', artist:'Amit Mishra', dur:'4:54', img:'https://images.unsplash.com/photo-1545389336-cf090694435e?w=200&h=200&fit=crop&auto=format' },
+        { title:'Maula Mere Maula', artist:'Roop Kumar Rathod', dur:'6:00', img:'https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=200&h=200&fit=crop&auto=format' },
+        { title:'Tajdar-e-Haram', artist:'Atif Aslam', dur:'8:22', img:'https://images.unsplash.com/photo-1466442929976-97f336a657be?w=200&h=200&fit=crop&auto=format' },
+        { title:'Naina Da Kya Kasoor', artist:'Amit Trivedi', dur:'4:38', img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&auto=format' },
+        { title:'Dama Dam Mast Qalandar', artist:'Nusrat Fateh Ali Khan', dur:'9:15', img:'https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?w=200&h=200&fit=crop&auto=format' },
+        { title:'Chhaap Tilak', artist:'Abida Parveen', dur:'7:46', img:'https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=200&h=200&fit=crop&auto=format' },
+      ]
+    }
+  },
+  {
+    id: 'gym-beast',
+    emoji: '💪',
+    text: 'High energy workout mix to crush my gym session',
+    tags: [],
+    playlist: {
+      cover: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=800',
+      title: 'Beast Mode Unleashed',
+      lang: 'Hindi',
+      desc: 'High-octane Bollywood & Punjabi bangers for max reps.',
+      credit: 'Fuel your workout',
+      stats: '1h 20m \u2022 10 Songs \u2022 AI Curated',
+      aiNote: 'Loaded with <strong>high BPM tracks</strong> \u2014 Bollywood power anthems and motivational bangers. Perfect for pushing through that last set!',
+      tracks: [
+        { title:'Apna Time Aayega', artist:'Ranveer Singh', dur:'3:54', img:'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=200&h=200&fit=crop&auto=format' },
+        { title:'Kar Har Maidaan Fateh', artist:'Sukhwinder Singh', dur:'4:23', img:'https://images.unsplash.com/photo-1461896836934-bd45ba4a57d6?w=200&h=200&fit=crop&auto=format' },
+        { title:'Ziddi Dil', artist:'Vishal Dadlani', dur:'3:38', img:'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=200&h=200&fit=crop&auto=format' },
+        { title:'Malhari', artist:'Vishal Dadlani', dur:'3:31', img:'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=200&h=200&fit=crop&auto=format' },
+        { title:'Sultan', artist:'Sukhwinder Singh, Shadab Faridi', dur:'4:45', img:'https://images.unsplash.com/photo-1517963879433-6ad2b056d712?w=200&h=200&fit=crop&auto=format' },
+        { title:'Dangal', artist:'Daler Mehndi', dur:'4:12', img:'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=200&h=200&fit=crop&auto=format' },
+        { title:'Brothers Anthem', artist:'Vishal Dadlani', dur:'3:56', img:'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200&h=200&fit=crop&auto=format' },
+        { title:'Ghungroo', artist:'Arijit Singh, Shilpa Rao', dur:'5:02', img:'https://images.unsplash.com/photo-1535743686920-55e4145369b9?w=200&h=200&fit=crop&auto=format' },
+        { title:'Nashe Si Chadh Gayi', artist:'Arijit Singh', dur:'4:13', img:'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=200&h=200&fit=crop&auto=format' },
+        { title:'Dhan Te Nan', artist:'Shankar Mahadevan', dur:'4:50', img:'https://images.unsplash.com/photo-1550259979-ed79b48d2a44?w=200&h=200&fit=crop&auto=format' },
+      ]
+    }
+  },
+];
+
+// Extra quick-chip prompts (smaller, inline)
+const quickChips = [
+  { id: 'chill-wfh', text: 'Lo-fi chill for working from home', parentId: 'rainy-drive' },
+  { id: 'morning-yoga', text: 'Calm morning yoga vibes', parentId: 'sufi-night' },
+  { id: 'road-trip', text: 'Road trip Hindi songs', parentId: 'rainy-drive' },
+  { id: 'tamil-romance', text: 'Romantic Tamil melodies', parentId: 'rainy-drive' },
+];
+
+// ── Render initial prompts ──
+// ── Main option selection ──
+function selectMainOption(el, option) {
+  // Mark selected, disable others
+  el.classList.add('selected');
+  document.querySelectorAll('#mainOptions .chip').forEach(c => {
+    if (c !== el) c.classList.add('disabled');
+  });
+
+  // Voice: open inline listening card in the chat, no full-screen overlay
+  if (option === 'voice') {
+    openVoiceInline();
+    return;
+  }
+
+  // User bubble
+  setTimeout(() => {
+    const userRow = document.createElement('div');
+    userRow.className = 'msg-row user';
+    userRow.innerHTML = `<div class="bubble bubble-user">${el.querySelector('span').textContent}</div>`;
+    document.getElementById('chatFlow').appendChild(userRow);
+    scrollToBottom();
+
+    if (option === 'prompt') {
+      setTimeout(() => {
+        addTypingIndicator();
+        setTimeout(() => {
+          removeTypingIndicator();
+          showPromptCards();
+        }, 700);
+      }, 300);
+    } else if (option === 'rj') {
+      setTimeout(() => showRJSelect(), 300);
+    } else if (option === 'podcast') {
+      setTimeout(() => showPodcastList(), 300);
+    }
+  }, 200);
+}
+
+function showPromptCards() {
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.id = 'promptStep';
+  row.innerHTML = `
+    ${AVATAR_HTML}
+    <div style="flex:1;">
+      <div class="bubble bubble-ai" style="max-width:100%;">
+        Pick a vibe, or describe what you want:
+      </div>
+      <div class="prompt-grid" id="promptGrid"></div>
+      <div class="more-chips" id="moreChips" style="margin-top:12px;"></div>
+    </div>
+  `;
+  document.getElementById('chatFlow').appendChild(row);
+  scrollToBottom();
+  renderPrompts();
+}
+
+function renderPrompts() {
+  const grid = document.getElementById('promptGrid');
+  grid.innerHTML = '';
+  promptSuggestions.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'prompt-card';
+    card.setAttribute('data-id', p.id);
+    card.onclick = () => selectPrompt(card, p);
+    card.innerHTML = `
+      <span class="prompt-emoji">${p.emoji}</span>
+      <div class="prompt-body">
+        <div class="prompt-text">${p.text}</div>
+        ${p.tags.length ? `<div class="prompt-tags">${p.tags.map(t => `<span class="prompt-tag">${t}</span>`).join('')}</div>` : ''}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  const chips = document.getElementById('moreChips');
+  chips.innerHTML = '<div class="prompt-section-label">More ideas</div>';
+  const chipWrap = document.createElement('div');
+  chipWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;';
+  quickChips.forEach(c => {
+    const chip = document.createElement('button');
+    chip.className = 'more-chip';
+    chip.textContent = c.text;
+    chip.onclick = () => {
+      // Map to parent playlist
+      const parent = promptSuggestions.find(p => p.id === c.parentId) || promptSuggestions[0];
+      const fakePrompt = { ...parent, text: c.text };
+      selectPrompt(null, fakePrompt);
+    };
+    chipWrap.appendChild(chip);
+  });
+  chips.appendChild(chipWrap);
+}
+
+// ── Helpers ──
+const AVATAR_HTML = '<div class="ai-avatar"><video autoplay loop muted playsinline><source src="https://sunit1986.github.io/design-prototypes/Assets/HelloJio_Listening_241.mp4" type="video/mp4"></video></div>';
+const FEEDBACK_HTML = `<div class="feedback-row">
+  <button class="fb-btn"><svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg></button>
+  <button class="fb-btn"><svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg></button>
+  <button class="fb-btn"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button>
+  <button class="fb-btn"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg></button>
+</div>`;
+
+// ── Dictation (speech-to-text into input field) ──
+function startDictation() {
+  const input = document.getElementById('chatTextInput');
+  const btn = document.getElementById('dictateBtn');
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  // Activate listening state
+  btn.style.background = 'var(--error)';
+  btn.querySelector('svg').style.fill = 'white';
+  input.placeholder = 'Listening...';
+  input.focus();
+
+  function simulateDictation() {
+    setTimeout(() => {
+      const phrases = ['Play something romantic', 'Add more Kishore Kumar songs', 'Save this playlist', 'Rainy day songs', 'Surprise me'];
+      const phrase = phrases[Math.floor(Math.random() * phrases.length)];
+      input.value = phrase;
+      input.placeholder = 'Ask anything..';
+      btn.style.background = '';
+      btn.querySelector('svg').style.fill = '';
+      toggleInputAction();
+    }, 2000);
+  }
+
+  if (!SpeechRecognition) { simulateDictation(); return; }
+
+  try {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.interimResults = true;
+    recognition.continuous = false;
+
+    recognition.onresult = (e) => {
+      const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+      input.value = transcript;
+      toggleInputAction();
+    };
+
+    recognition.onend = () => {
+      btn.style.background = '';
+      btn.querySelector('svg').style.fill = '';
+      input.placeholder = 'Ask anything..';
+    };
+
+    recognition.onerror = () => {
+      btn.style.background = '';
+      btn.querySelector('svg').style.fill = '';
+      input.placeholder = 'Ask anything..';
+      simulateDictation();
+    };
+
+    recognition.start();
+  } catch (e) {
+    simulateDictation();
+  }
+}
+
+function scrollToBottom() {
+  const area = document.getElementById('contentArea');
+  setTimeout(() => { area.scrollTop = area.scrollHeight; }, 60);
+}
+
+// ── Input bar: Speak ↔ Send toggle ──
+function toggleInputAction() {
+  const input = document.getElementById('chatTextInput');
+  const btn = document.getElementById('bwActionRight');
+  const iconSpeak = document.getElementById('bwIconSpeak');
+  const iconSend = document.getElementById('bwIconSend');
+  const label = document.getElementById('bwSpeakLabel');
+  const hasText = input.value.trim().length > 0;
+  iconSpeak.style.display = hasText ? 'none' : 'block';
+  label.style.display = hasText ? 'none' : 'inline';
+  iconSend.style.display = hasText ? 'block' : 'none';
+  btn.classList.toggle('is-send', hasText);
+}
+
+function handleActionRight() {
+  const input = document.getElementById('chatTextInput');
+  if (input.value.trim()) {
+    handleTextSend();
+  } else {
+    openVoiceInline();
+  }
+}
+
+// ── Text input handler — works across all use cases ──
+function handleTextSend() {
+  const input = document.getElementById('chatTextInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  toggleInputAction(); // Reset button back to Speak
+
+  // Add user bubble
+  const userRow = document.createElement('div');
+  userRow.className = 'msg-row user';
+  userRow.innerHTML = `<div class="bubble bubble-user">${text}</div>`;
+  document.getElementById('chatFlow').appendChild(userRow);
+  scrollToBottom();
+
+  // Route to the right handler based on context
+  addTypingIndicator();
+  setTimeout(() => {
+    removeTypingIndicator();
+    const lower = text.toLowerCase();
+
+    // If a song is currently playing or text looks like a voice command, route to voice
+    if (isPlaying || lower.startsWith('play ') || lower.includes('next') || lower.includes('pause') ||
+        lower.includes('skip') || lower.includes('resume') || lower.includes('romantic') ||
+        lower.includes('peppy') || lower.includes('surprise') || lower.includes('kishore') ||
+        lower.includes('arijit') || lower.includes('lata') || lower.includes('dedicate') ||
+        lower.includes('trivia') || lower.includes('fun fact') || lower.includes('90s') ||
+        lower.includes('rainy') || lower.includes('monsoon') || lower.includes('heartbreak')) {
+      processVoiceCommand(text);
+    }
+    // If it looks like a vibe/mood description, treat as UC2 prompt
+    else if (lower.includes('vibe') || lower.includes('mood') || lower.includes('playlist') ||
+             lower.includes('songs for') || lower.includes('music for') || lower.includes('mix')) {
+      const fakePrompt = promptSuggestions.find(p => {
+        const pLower = p.text.toLowerCase();
+        return lower.split(' ').some(w => w.length > 3 && pLower.includes(w));
+      }) || promptSuggestions[0];
+      selectPrompt(null, fakePrompt);
+    }
+    // Default — treat as a song request
+    else {
+      const song = voiceSongDB.find(s => s.title.toLowerCase().includes(lower) || s.artist.toLowerCase().includes(lower));
+      if (song) {
+        voicePlaySong(song, `Playing <strong>${song.title}</strong> for you`);
+      } else {
+        addAIResponseWithChips(
+          `I\'d love to help with that! Here are some things I can do:`,
+          ['"Play Lag Jaa Gale"', '"Rainy day songs"', '"Surprise me"']
+        );
+      }
+    }
+  }, 700);
+}
+
+function addTypingIndicator() {
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.id = 'typingIndicator';
+  row.innerHTML = `
+    ${AVATAR_HTML}
+    <div class="bubble bubble-ai"><div class="typing-dots"><span></span><span></span><span></span></div></div>
+  `;
+  document.getElementById('chatFlow').appendChild(row);
+  scrollToBottom();
+}
+
+function removeTypingIndicator() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+// ── Prompt selection ──
+function selectPrompt(cardEl, promptData) {
+  // Disable all cards and chips
+  document.querySelectorAll('.prompt-card').forEach(c => {
+    if (c === cardEl) c.classList.add('selected');
+    else c.classList.add('disabled');
+  });
+  document.querySelectorAll('.more-chip').forEach(c => {
+    c.style.opacity = '0.25';
+    c.style.pointerEvents = 'none';
+  });
+
+  // Add user bubble with the prompt text
+  setTimeout(() => {
+    const userRow = document.createElement('div');
+    userRow.className = 'msg-row user';
+    userRow.innerHTML = `<div class="bubble bubble-user">${promptData.text}</div>`;
+    document.getElementById('chatFlow').appendChild(userRow);
+    scrollToBottom();
+
+    // AI typing then curating message
+    setTimeout(() => {
+      addTypingIndicator();
+      setTimeout(() => {
+        removeTypingIndicator();
+
+        // Show curating message with inline progress bar
+        const curateRow = document.createElement('div');
+        curateRow.className = 'msg-row';
+        curateRow.id = 'curatingRow';
+        curateRow.innerHTML = `
+          ${AVATAR_HTML}
+          <div style="flex:1;min-width:0;">
+            <div class="bubble bubble-ai" style="max-width:100%;">
+              <div style="font-weight:700;margin-bottom:6px;">Curating your playlist...</div>
+              <div style="font-size:12px;color:var(--text-low);margin-bottom:10px;">Analyzing mood, context & preferences</div>
+              <div style="height:4px;background:var(--grey-40);border-radius:2px;overflow:hidden;">
+                <div id="inlineCurateProgress" style="height:100%;width:0%;background:var(--sparkle);border-radius:2px;transition:width 2.5s ease-out;"></div>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('chatFlow').appendChild(curateRow);
+        scrollToBottom();
+
+        // Animate progress
+        setTimeout(() => {
+          document.getElementById('inlineCurateProgress').style.width = '100%';
+        }, 100);
+
+        // After curating, replace with inline playlist card
+        setTimeout(() => {
+          const row = document.getElementById('curatingRow');
+          if (row) row.remove();
+          showInlinePlaylist(promptData);
+        }, 3000);
+      }, 900);
+    }, 300);
+  }, 250);
+}
+
+// ── Inline playlist card (UC2 — chat-native, JioSaavn style) ──
+function showInlinePlaylist(promptData) {
+  const pl = promptData.playlist;
+
+  const buildTrackHtml = (t, i, isActive) => `
+    <div class="ipl-track${isActive ? ' playing' : ''}" data-idx="${i}" onclick="playInlineTrack(${i})">
+      <img class="ipl-track-art" src="${t.img}" alt="">
+      <div class="ipl-track-info">
+        <div class="ipl-track-title">${t.title}</div>
+        <div class="ipl-track-artist">${t.artist}</div>
+      </div>
+      <div class="ipl-jiotune" onclick="event.stopPropagation()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" fill="var(--sparkle)"/></svg>
+        <span>JioTune</span>
+      </div>
+      <button class="ipl-track-more" onclick="event.stopPropagation()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+    </div>`;
+
+  const allTracksHtml = pl.tracks.map((t, i) => buildTrackHtml(t, i, i === 0)).join('');
+
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.id = 'inlinePlaylistRow';
+  row.innerHTML = `
+    ${AVATAR_HTML}
+    <div style="flex:1;min-width:0;">
+      <div class="bubble bubble-ai" style="max-width:100%;margin-bottom:8px;">
+        ${pl.aiNote}
+      </div>
+      <div class="ipl-card">
+        <!-- Cover with gradient, heart & play -->
+        <div class="ipl-cover">
+          <img src="${pl.cover}" alt="${pl.title}">
+          <div class="ipl-cover-gradient"></div>
+          <div class="ipl-cover-info">
+            <div class="ipl-cover-title">${pl.title}</div>
+          </div>
+          <div class="ipl-cover-lang">${pl.lang}</div>
+          <div class="ipl-cover-actions">
+            <button class="ipl-heart-btn" onclick="this.classList.toggle('liked');event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </button>
+            <button class="ipl-play-fab" onclick="playAllInline()">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Meta: title, desc, stats, actions (like JioSaavn) -->
+        <div class="ipl-meta">
+          <div class="ipl-meta-title">${pl.title} — ${pl.lang}</div>
+          <div class="ipl-meta-desc">${pl.desc}</div>
+          <div class="ipl-powered">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--sparkle)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+            Powered by <strong>JioSaavn</strong>
+          </div>
+          <div class="ipl-icon-row">
+            <button class="ipl-icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+            <button class="ipl-icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+            <span class="ipl-stat-text">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              ${pl.stats}
+            </span>
+          </div>
+        </div>
+
+        <!-- Scrollable track list — all tracks, continuous feed -->
+        <div class="ipl-tracks" id="iplTrackList">
+          ${allTracksHtml}
+        </div>
+
+        <!-- Now playing bar inside the card (bottom of playlist) -->
+        <div class="ipl-now-playing" id="iplNowPlaying">
+          <div class="ipl-np-progress"><div class="ipl-np-progress-fill"></div></div>
+          <img class="ipl-np-art" id="iplNpArt" src="${pl.tracks[0].img}" alt="">
+          <div class="ipl-np-info">
+            <div class="ipl-np-title" id="iplNpTitle">${pl.tracks[0].title}</div>
+            <div class="ipl-np-artist" id="iplNpArtist">${pl.tracks[0].artist}</div>
+          </div>
+          <button class="ipl-np-btn" onclick="iplPrev()"><svg viewBox="0 0 24 24" width="20" height="20" fill="var(--text-high)"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+          <button class="ipl-np-btn ipl-np-play" id="iplNpPlayBtn" onclick="toggleIplPlay()"><svg viewBox="0 0 24 24" width="24" height="24" fill="var(--text-high)"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button>
+          <button class="ipl-np-btn" onclick="iplNext()"><svg viewBox="0 0 24 24" width="20" height="20" fill="var(--text-high)"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+        </div>
+      </div>
+      <!-- Follow-up chips with real actions -->
+      <div id="iplChipsWrap" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;">
+        <button class="voice-hint-chip" onclick="handleIplChip('upbeat')">Make it more upbeat</button>
+        <button class="voice-hint-chip" onclick="handleIplChip('arijit')">Add more Arijit songs</button>
+        <button class="voice-hint-chip" onclick="handleIplChip('save')">Save this playlist</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('chatFlow').appendChild(row);
+  scrollToBottom();
+
+  // Store tracks & auto-play first
+  window._currentTracks = pl.tracks;
+  window._currentPlaylistData = promptData;
+  window._currentTrackIndex = 0;
+  isPlaying = true;
+
+  // Remove old floating mini-player if it exists
+  const oldMp = document.getElementById('iplMiniPlayer');
+  if (oldMp) oldMp.remove();
+}
+
+function playInlineTrack(index) {
+  const tracks = window._currentTracks;
+  if (!tracks || !tracks[index]) return;
+  window._currentTrackIndex = index;
+  isPlaying = true;
+  playSongAudio(tracks[index]);
+
+  // Update track list highlights
+  document.querySelectorAll('.ipl-track').forEach(el => {
+    const idx = parseInt(el.dataset.idx);
+    el.classList.toggle('playing', idx === index);
+  });
+
+  // Update now-playing bar inside card
+  const t = tracks[index];
+  const art = document.getElementById('iplNpArt');
+  const title = document.getElementById('iplNpTitle');
+  const artist = document.getElementById('iplNpArtist');
+  if (art) art.src = t.img;
+  if (title) title.textContent = t.title;
+  if (artist) artist.textContent = t.artist;
+
+  // Update play button
+  const pb = document.getElementById('iplNpPlayBtn');
+  if (pb) pb.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="var(--text-high)"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+}
+
+function playAllInline() {
+  playInlineTrack(0);
+  const fab = document.querySelector('.ipl-play-fab');
+  if (fab) fab.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
+}
+
+function toggleIplPlay() {
+  isPlaying = !isPlaying;
+  isPlaying ? resumeSongAudio() : pauseSongAudio();
+  const btn = document.getElementById('iplNpPlayBtn');
+  if (btn) btn.innerHTML = isPlaying
+    ? '<svg viewBox="0 0 24 24" width="24" height="24" fill="var(--text-high)"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'
+    : '<svg viewBox="0 0 24 24" width="24" height="24" fill="var(--text-high)"><path d="M8 5v14l11-7z"/></svg>';
+}
+
+function iplNext() {
+  const tracks = window._currentTracks;
+  if (!tracks) return;
+  playInlineTrack((window._currentTrackIndex + 1) % tracks.length);
+}
+
+function iplPrev() {
+  const tracks = window._currentTracks;
+  if (!tracks) return;
+  playInlineTrack(window._currentTrackIndex > 0 ? window._currentTrackIndex - 1 : tracks.length - 1);
+}
+
+// ── Chip actions with real logical flows ──
+function handleIplChip(action) {
+  const chipsWrap = document.getElementById('iplChipsWrap');
+
+  if (action === 'save') {
+    // Show saved confirmation inline
+    if (chipsWrap) {
+      const saveBtn = [...chipsWrap.querySelectorAll('.voice-hint-chip')].find(b => b.textContent.includes('Save'));
+      if (saveBtn) {
+        saveBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--sparkle)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Saved!';
+        saveBtn.style.background = 'var(--sparkle-20)';
+        saveBtn.style.color = 'var(--sparkle-60)';
+        saveBtn.style.pointerEvents = 'none';
+      }
+    }
+    // Add AI confirmation in chat
+    const userRow = document.createElement('div');
+    userRow.className = 'msg-row user';
+    userRow.innerHTML = '<div class="bubble bubble-user">Save this playlist</div>';
+    document.getElementById('chatFlow').appendChild(userRow);
+    scrollToBottom();
+    addTypingIndicator();
+    setTimeout(() => {
+      removeTypingIndicator();
+      // Custom AI response with playlist-aware chips
+      const saveAiRow = document.createElement('div');
+      saveAiRow.className = 'msg-row';
+      saveAiRow.innerHTML = `
+        ${AVATAR_HTML}
+        <div style="flex:1;min-width:0;">
+          <div class="bubble bubble-ai" style="max-width:100%;">Playlist saved to your JioSaavn library! You can find it under <strong>My Music</strong>.</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+            <button class="voice-hint-chip" onclick="handlePostSaveChip('next')">Play next playlist</button>
+            <button class="voice-hint-chip" onclick="handlePostSaveChip('share')">Share with friends</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('chatFlow').appendChild(saveAiRow);
+      scrollToBottom();
+    }, 600);
+  }
+
+  else if (action === 'arijit') {
+    // Add more Arijit songs to the existing playlist
+    const userRow = document.createElement('div');
+    userRow.className = 'msg-row user';
+    userRow.innerHTML = '<div class="bubble bubble-user">Add more Arijit songs</div>';
+    document.getElementById('chatFlow').appendChild(userRow);
+    scrollToBottom();
+    addTypingIndicator();
+    setTimeout(() => {
+      removeTypingIndicator();
+      // Append new Arijit tracks to the track list
+      const newTracks = [
+        { title:'Gerua', artist:'Arijit Singh', dur:'5:06', img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=200&h=200&fit=crop&auto=format' },
+        { title:'Hawayein', artist:'Arijit Singh', dur:'4:52', img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop&auto=format' },
+        { title:'Phir Bhi Tumko Chaahunga', artist:'Arijit Singh', dur:'4:46', img:'https://images.unsplash.com/photo-1474540412665-1cdae210ae6b?w=200&h=200&fit=crop&auto=format' },
+      ];
+      const trackList = document.getElementById('iplTrackList');
+      const startIdx = window._currentTracks.length;
+      newTracks.forEach((t, i) => {
+        window._currentTracks.push(t);
+        const div = document.createElement('div');
+        div.className = 'ipl-track ipl-track-new';
+        div.dataset.idx = startIdx + i;
+        div.onclick = () => playInlineTrack(startIdx + i);
+        div.innerHTML = `
+          <img class="ipl-track-art" src="${t.img}" alt="">
+          <div class="ipl-track-info">
+            <div class="ipl-track-title">${t.title}</div>
+            <div class="ipl-track-artist">${t.artist}</div>
+          </div>
+          <div class="ipl-jiotune" onclick="event.stopPropagation()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" fill="var(--sparkle)"/></svg>
+            <span>JioTune</span>
+          </div>
+          <button class="ipl-track-more" onclick="event.stopPropagation()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-low)" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+        `;
+        trackList.appendChild(div);
+      });
+
+      const aiRow = document.createElement('div');
+      aiRow.className = 'msg-row';
+      aiRow.innerHTML = `${AVATAR_HTML}<div style="flex:1;"><div class="bubble bubble-ai">Added <strong>3 more Arijit Singh tracks</strong> to your playlist — Gerua, Hawayein, and Phir Bhi Tumko Chaahunga. Scroll down to see them!</div></div>`;
+      document.getElementById('chatFlow').appendChild(aiRow);
+      scrollToBottom();
+
+      // Disable the chip
+      const btn = [...chipsWrap.querySelectorAll('.voice-hint-chip')].find(b => b.textContent.includes('Arijit'));
+      if (btn) { btn.innerHTML = 'Added!'; btn.style.pointerEvents = 'none'; btn.style.opacity = '0.5'; }
+    }, 800);
+  }
+
+  else if (action === 'upbeat') {
+    // Swap playlist tracks to upbeat versions
+    const userRow = document.createElement('div');
+    userRow.className = 'msg-row user';
+    userRow.innerHTML = '<div class="bubble bubble-user">Make it more upbeat</div>';
+    document.getElementById('chatFlow').appendChild(userRow);
+    scrollToBottom();
+    addTypingIndicator();
+    setTimeout(() => {
+      removeTypingIndicator();
+
+      // Replace with upbeat playlist (use punjabi-party if available)
+      const upbeatData = promptSuggestions.find(p => p.id === 'punjabi-party') || promptSuggestions[1];
+      if (upbeatData) {
+        // Remove old playlist row
+        const oldRow = document.getElementById('inlinePlaylistRow');
+        if (oldRow) oldRow.remove();
+        // Render new upbeat playlist
+        showInlinePlaylist({ ...window._currentPlaylistData, playlist: { ...upbeatData.playlist, aiNote: 'Turned up the energy! Here\'s a more <strong>upbeat mix</strong> — same vibe, higher tempo. Let\'s go!' } });
+      }
+    }, 1000);
+  }
+}
+
+// ── Post-save chip handlers ──
+function handlePostSaveChip(action) {
+  if (action === 'next') {
+    // Show user bubble
+    const userRow = document.createElement('div');
+    userRow.className = 'msg-row user';
+    userRow.innerHTML = '<div class="bubble bubble-user">Play next playlist</div>';
+    document.getElementById('chatFlow').appendChild(userRow);
+    scrollToBottom();
+    addTypingIndicator();
+    setTimeout(() => {
+      removeTypingIndicator();
+      // Pick a different playlist than the current one
+      const currentId = window._currentPlaylistData?.playlist?.title;
+      const nextPrompt = promptSuggestions.find(p => p.playlist.title !== currentId) || promptSuggestions[1];
+      // Remove old playlist
+      const oldRow = document.getElementById('inlinePlaylistRow');
+      if (oldRow) oldRow.remove();
+      // Show new playlist
+      showInlinePlaylist({ ...nextPrompt, playlist: { ...nextPrompt.playlist, aiNote: 'Here\'s your next playlist — <strong>' + nextPrompt.playlist.title + '</strong>. Fresh vibes incoming!' } });
+    }, 1000);
+  }
+
+  else if (action === 'share') {
+    const userRow = document.createElement('div');
+    userRow.className = 'msg-row user';
+    userRow.innerHTML = '<div class="bubble bubble-user">Share with friends</div>';
+    document.getElementById('chatFlow').appendChild(userRow);
+    scrollToBottom();
+    addTypingIndicator();
+    setTimeout(() => {
+      removeTypingIndicator();
+      // Show share options as AI response
+      const shareRow = document.createElement('div');
+      shareRow.className = 'msg-row';
+      shareRow.innerHTML = `
+        ${AVATAR_HTML}
+        <div style="flex:1;min-width:0;">
+          <div class="bubble bubble-ai" style="max-width:100%;">
+            <div style="font-weight:700;margin-bottom:8px;">Share this playlist</div>
+            <div style="display:flex;gap:12px;margin-top:8px;">
+              <div class="ipl-share-opt" onclick="this.style.opacity='0.5'">
+                <div style="width:40px;height:40px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                </div>
+                <span style="font-size:10px;color:var(--text-low);margin-top:4px;">WhatsApp</span>
+              </div>
+              <div class="ipl-share-opt" onclick="this.style.opacity='0.5'">
+                <div style="width:40px;height:40px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                </div>
+                <span style="font-size:10px;color:var(--text-low);margin-top:4px;">Copy Link</span>
+              </div>
+              <div class="ipl-share-opt" onclick="this.style.opacity='0.5'">
+                <div style="width:40px;height:40px;border-radius:50%;background:var(--grey-100);display:flex;align-items:center;justify-content:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                </div>
+                <span style="font-size:10px;color:var(--text-low);margin-top:4px;">More</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('chatFlow').appendChild(shareRow);
+      scrollToBottom();
+    }, 600);
+  }
+}
+
+// ── Processing (legacy — kept for compatibility) ──
+function startProcessing(promptData) {
+  const screen = document.getElementById('processingScreen');
+  const fill = document.getElementById('progressFill');
+  document.getElementById('processingPrompt').textContent = `"${promptData.text}"`;
+
+  screen.classList.add('active');
+  setTimeout(() => { fill.style.width = '100%'; }, 100);
+
+  setTimeout(() => {
+    screen.classList.remove('active');
+    fill.style.width = '0%';
+    showPlaylist(promptData.playlist);
+  }, 3200);
+}
+
+// ── Playlist ──
+function showPlaylist(data) {
+  document.getElementById('coverImg').src = data.cover;
+  document.getElementById('coverTitle').textContent = data.title;
+  document.getElementById('coverLang').textContent = data.lang;
+  document.getElementById('plTitle').textContent = data.title;
+  document.getElementById('plDesc').textContent = data.desc;
+  document.getElementById('plCredit').textContent = data.credit;
+  document.getElementById('plStats').textContent = data.stats;
+  document.getElementById('aiNoteText').innerHTML = data.aiNote;
+
+  const list = document.getElementById('trackList');
+  list.innerHTML = '';
+  data.tracks.forEach((t, i) => {
+    const item = document.createElement('div');
+    item.className = 'track-item' + (i === 0 ? ' active' : '');
+    item.onclick = () => playTrack(i, data.tracks);
+    item.innerHTML = `
+      <span class="track-num">${i + 1}</span>
+      <img class="track-thumb" src="${t.img}" alt="">
+      <div class="track-info">
+        <div class="track-title">${t.title}</div>
+        <div class="track-artist">${t.artist}</div>
+      </div>
+      <span class="track-duration">${t.dur}</span>
+      <button class="track-more">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+      </button>
+    `;
+    list.appendChild(item);
+  });
+
+  document.getElementById('playlistScreen').classList.add('active');
+  document.getElementById('chatHeader').style.display = 'none';
+
+  // Store tracks for skip
+  window._currentTracks = data.tracks;
+  window._currentTrackIndex = 0;
+
+  setTimeout(() => {
+    playTrack(0, data.tracks);
+  }, 600);
+}
+
+function playTrack(index, tracks) {
+  const t = tracks[index];
+  isPlaying = true;
+  window._currentTrackIndex = index;
+  window._currentTracks = tracks;
+  document.querySelectorAll('.track-item').forEach((el, i) => {
+    el.classList.toggle('active', i === index);
+  });
+  const mp = document.getElementById('miniPlayer');
+  mp.style.display = 'block';
+  document.getElementById('miniThumb').src = t.img;
+  document.getElementById('miniTitle').textContent = t.title;
+  document.getElementById('miniArtist').textContent = t.artist;
+  document.getElementById('miniPlayBtn').innerHTML =
+    '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
+}
+
+function skipTrack(dir) {
+  const tracks = window._currentTracks;
+  if (!tracks) return;
+  let idx = (window._currentTrackIndex || 0) + dir;
+  if (idx < 0) idx = tracks.length - 1;
+  if (idx >= tracks.length) idx = 0;
+  playTrack(idx, tracks);
+}
+
+function toggleMiniPlay() {
+  isPlaying = !isPlaying;
+  document.getElementById('miniPlayBtn').innerHTML = isPlaying
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+}
+
+function togglePlayAll() {
+  isPlaying = !isPlaying;
+  document.getElementById('playAllBtn').innerHTML = isPlaying
+    ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+}
+
+function closePlaylist() {
+  document.getElementById('playlistScreen').classList.remove('active');
+  document.getElementById('chatHeader').style.display = 'flex';
+  document.getElementById('miniPlayer').style.display = 'none';
+}
+
+function resetAll() {
+  isPlaying = false;
+  voiceMode = false;
+  voiceQueueIndex = 0;
+  clearTimeout(window._voiceAutoTimer);
+  if (songInterval) { clearInterval(songInterval); songInterval = null; }
+  if (podcastInterval) { clearInterval(podcastInterval); podcastInterval = null; }
+  selectedPersona = null; currentSong = 0; songProgress = 0; interludeShown = false;
+  podcastPlaying = false; podcastProgress = 0;
+  document.getElementById('playlistScreen').classList.remove('active');
+  document.getElementById('processingScreen').classList.remove('active');
+  document.getElementById('voiceOverlay').classList.remove('active');
+  document.getElementById('chatHeader').style.display = 'flex';
+  document.getElementById('miniPlayer').style.display = 'none';
+  document.getElementById('chatMiniPlayer').style.display = 'none';
+
+  const flow = document.getElementById('chatFlow');
+  const children = Array.from(flow.children);
+  children.forEach((child, i) => { if (i > 0) child.remove(); });
+
+  document.querySelectorAll('#mainOptions .chip').forEach(c => {
+    c.classList.remove('selected', 'disabled');
+  });
+
+  document.getElementById('contentArea').scrollTop = 0;
+}
+
+// ═══════════════════════════════════════
+// VOICE PLAYBACK FLOW
+// ═══════════════════════════════════════
+
+const sampleLyrics = [
+  'Lag jaa gale ke phir',
+  'Ye haseen raat ho na ho',
+  'Shayad phir is janam mein',
+  'Mulaqaat ho na ho',
+  '',
+  'Lag jaa gale ke phir',
+  'Ye haseen raat ho na ho',
+  '',
+  'Paas aa to chale aao',
+  'Baahon mein aake milo',
+  'Ek zindagi hai humne',
+  'Kisi ki aas mein kho di',
+  '',
+  'Hum ko mili hai aaj ye',
+  'Ghadiyan nasib se',
+  'Ji bhar ke dekh lo hume',
+  'Takti rahi hai nazar abhi',
+  '',
+  'Lag jaa gale ke phir...',
+];
+
+const voiceSongDB = [
+  {
+    title:'Lag Jaa Gale', artist:'Lata Mangeshkar', film:'Woh Kaun Thi', dur:'3:48',
+    img:'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=200&h=200&fit=crop&auto=format',
+    audio:'lag-jaa-gale.mp3',
+    mood:'romantic',
+    trivia:'Recorded in a single take in 1964. Music by Madan Mohan — widely considered Lata ji\'s most soulful recording.',
+    chips:['More by Lata Mangeshkar','Something peppy now','Dedicate this song','Next song'],
+    lyrics:['Lag jaa gale ke phir','Ye haseen raat ho na ho','Shayad phir is janam mein','Mulaqaat ho na ho','','Lag jaa gale ke phir','Ye haseen raat ho na ho','','Paas aa to chale aao','Baahon mein aake milo','Ek zindagi hai humne','Kisi ki aas mein kho di','','Hum ko mili hai aaj ye','Ghadiyan nasib se','Ji bhar ke dekh lo hume','','Lag jaa gale ke phir...']
+  },
+  {
+    title:'Rimjhim Gire Sawan', artist:'Kishore Kumar', film:'Manzil', dur:'5:01',
+    img:'https://images.unsplash.com/photo-1438449805896-28a666819a20?w=200&h=200&fit=crop&auto=format',
+    mood:'rainy',
+    trivia:'From the 1979 film Manzil. R.D. Burman\'s monsoon classic — Kishore Da\'s voice feels like rain itself.',
+    chips:['More monsoon songs','More by Kishore Kumar','Something romantic','Next song'],
+    lyrics:['Rimjhim gire sawan','Sulag sulag jaaye mann','Bheege aaj is mausam mein','Lagi kaisi ye agan','','Rimjhim gire sawan','','Koi dil ko ye samjhaye','Kya baat hai kya baat hai','Bekhudi si hai bekhudi si hai','Ye kaisi halaat hai','','Rimjhim gire sawan...']
+  },
+  {
+    title:'Tum Hi Ho', artist:'Arijit Singh', film:'Aashiqui 2', dur:'4:22',
+    img:'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200&h=200&fit=crop&auto=format',
+    mood:'romantic',
+    trivia:'Arijit Singh\'s breakthrough. The first take was rejected — the second, recorded raw with emotion, became iconic.',
+    chips:['More by Arijit Singh','Something old classic','Dedicate this song','Next song'],
+    lyrics:['Hum tere bin ab reh nahi sakte','Tere bina kya wajood mera','Tujhse juda agar ho jaayenge','To khud se hi ho jaayenge judaa','','Kyunki tum hi ho','Ab tum hi ho','Zindagi ab tum hi ho','Chain bhi mera dard bhi','Meri aashiqui ab tum hi ho','','Tum hi ho...']
+  },
+  {
+    title:'Kal Ho Naa Ho', artist:'Sonu Nigam', film:'Kal Ho Naa Ho', dur:'5:17',
+    img:'https://images.unsplash.com/photo-1476842634003-7dcca8f832de?w=200&h=200&fit=crop&auto=format',
+    mood:'emotional',
+    trivia:'Shankar-Ehsaan-Loy composed this in one sitting. Sonu Nigam cried during the recording session.',
+    chips:['More emotional songs','More by Sonu Nigam','Something upbeat now','Next song'],
+    lyrics:['Kal ho naa ho','Har pal yahan jee lena ji','Jo hai sama kal ho naa ho','','Chahe jo tumko puri duniya','Koi na tumsa yahaan','Baat karni mujhe mushkil','Kabhi thi itni aasaan','','Dil ki ye aarzoo thi','Koi aisa miley jinhe','Dekh ke yeh jahan','Tham jaaye kahin','','Kal ho naa ho...']
+  },
+  {
+    title:'Channa Mereya', artist:'Arijit Singh', film:'Ae Dil Hai Mushkil', dur:'4:50',
+    img:'https://images.unsplash.com/photo-1519741497674-611481863552?w=200&h=200&fit=crop&auto=format',
+    audio:'channa-mereya.mp3',
+    mood:'heartbreak',
+    trivia:'Pritam spent 3 months perfecting this. The longing in Arijit\'s voice is unmatched in modern Bollywood.',
+    chips:['More heartbreak songs','Something hopeful now','More by Arijit Singh','Next song'],
+    lyrics:['Achha chalta hoon','Duaon mein yaad rakhna','Mere zikr ka zubaan pe','Swaad rakhna','','Dil khush rakhna','Aur sada muskurate rehna','','Channa mereya mereya','Channa mereya mereya','Channa mereya mereya','Beli maahiya','','Mein phir bhi tumko chahunga','Mein phir bhi tumko chahunga','','Channa mereya...']
+  },
+  {
+    title:'Pehla Nasha', artist:'Udit Narayan', film:'Jo Jeeta Wohi Sikandar', dur:'5:04',
+    img:'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=200&h=200&fit=crop&auto=format',
+    mood:'nostalgic',
+    trivia:'Jatin-Lalit\'s 1992 masterpiece. Udit Narayan and Sadhana Sargam\'s duet became the anthem of first love.',
+    chips:['More 90s nostalgia','Something romantic','More by Udit Narayan','Next song'],
+    lyrics:['Pehla nasha pehla khumar','Naya pyar hai naya intezar','Kar loon main kya apna haal','Aye dil-e-beqaraar','','Pehla nasha pehla khumar','','Meri nazar ne','Meri nazar ne kiya','Kya ishara ki le gayi dil ki sarkar','','Pehla nasha pehla khumar...']
+  },
+  {
+    title:'Kabira', artist:'Arijit Singh, Tochi Raina', film:'YJHD', dur:'3:55',
+    img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=200&h=200&fit=crop&auto=format',
+    mood:'reflective',
+    trivia:'Inspired by 15th-century poet-saint Kabir. Pritam blended Sufi philosophy with indie — a rare feat.',
+    chips:['More reflective songs','Something upbeat now','More from YJHD','Next song'],
+    lyrics:['Kabira maan ja','Re maan ja','Tu kahe awaara','Kahe phire re','','Han ban ja jo tera','Muskura ke tu jo dekhe','Khol de are band aankhen','Soch le are bandhe haathon ko','','Kabira maan ja...','','Jag musafir chalte jaana','Jo mile bura bhalaa','','Kabira...']
+  },
+  {
+    title:'Ae Dil Hai Mushkil', artist:'Arijit Singh', film:'Ae Dil Hai Mushkil', dur:'4:29',
+    img:'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200&h=200&fit=crop&auto=format',
+    mood:'longing',
+    trivia:'Karan Johar wrote the lyrics himself, inspired by a 1963 Guru Dutt film — a nod to classic heartbreak.',
+    chips:['More longing songs','Something lighter now','More by Arijit Singh','Next song'],
+    lyrics:['Ae dil hai mushkil jeena yahan','Zara hat ke zara bach ke','Yeh hai Bombay meri jaan','','Ishq tera dard mera','Mujhe chahiye tujhe kya pata','Ae dil hai mushkil','Ae dil hai mushkil','','Teri meri kahaani hai barish','Mein bheegi yaadon ki nishaani hai','Mohabbat gum hai kisi ke milne mein','Kisi ke bichadne mein','','Ae dil hai mushkil...']
+  },
+];
+
+// Voice commands → responses
+const voiceCommands = [
+  { hints: ['Play Lag Jaa Gale', 'Play Tum Hi Ho', 'Play Channa Mereya'] },
+  { hints: ['Next song', 'Skip this'] },
+  { hints: ['Pause', 'Stop'] },
+  { hints: ['Resume', 'Play'] },
+  { hints: ['Something romantic', 'Romantic mood'] },
+  { hints: ['Something peppy', 'Something upbeat'] },
+  { hints: ['Play songs by Kishore Kumar'] },
+  { hints: ['Go back', 'Previous song'] },
+  { hints: ['Monsoon songs', 'Rainy day songs'] },
+  { hints: ['Something from the 90s', '90s nostalgia'] },
+  { hints: ['Dedicate this song'] },
+  { hints: ['Tell me about this song', 'Fun fact'] },
+];
+
+let voiceQueueIndex = 0;
+let voiceMode = false;
+
+// Flatten all hints for display rotation
+const allVoiceHints = voiceCommands.flatMap(c => c.hints);
+
+// Curated song-focused chips for the listening card (UC1 — Play a Song)
+// These suggest specific songs, a contextual mood, and a freeform option
+const listeningSuggestions = [
+  // Pool of song name chips (pick 2 at random)
+  { type: 'song', hints: ['Play Lag Jaa Gale', 'Play Tum Hi Ho', 'Play Channa Mereya', 'Play Pehla Nasha', 'Play Kabira', 'Play Kal Ho Naa Ho'] },
+  // Pool of contextual/occasion chips (pick 1)
+  { type: 'occasion', hints: ['Rainy day songs', 'Something from the 90s', 'Play songs by Kishore Kumar', 'Play something by Arijit Singh'] },
+  // Freeform option (always shown)
+  { type: 'freeform', hint: 'Surprise me' },
+];
+
+// ── Inline listening card (replaces full-screen overlay for chat flow) ──
+function openVoiceInline() {
+  voiceMode = true;
+
+  // Remove any existing listening card (e.g. user taps Speak again)
+  const existing = document.getElementById('voiceInlineCardRow');
+  if (existing) existing.remove();
+
+  // Build curated chips: 2 song names + 1 occasion + 1 freeform
+  const songPool = [...listeningSuggestions[0].hints].sort(() => 0.5 - Math.random()).slice(0, 2);
+  const occasionPool = [...listeningSuggestions[1].hints].sort(() => 0.5 - Math.random()).slice(0, 1);
+  const freeform = [listeningSuggestions[2].hint];
+  const chips = [...songPool, ...occasionPool, ...freeform];
+  const hintChips = chips.map(h =>
+    `<button class="voice-hint-chip" onclick="inlineVoiceCommand('${h.replace(/'/g, "\\'")}')">"${h}"</button>`
+  ).join('');
+
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.id = 'voiceInlineCardRow';
+  row.innerHTML = `
+    ${AVATAR_HTML}
+    <div style="flex:1;">
+      <div class="voice-inline-card">
+        <div class="vic-mic-wrap">
+          <div class="vic-mic-ring">
+            <button class="vic-mic-btn">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z" fill="white"/></svg>
+            </button>
+          </div>
+          <div class="vic-status">Listening...</div>
+          <div class="vic-sub">Tap a song or say something</div>
+        </div>
+        <div class="vic-hint-label">Try saying</div>
+        <div class="vic-hints-wrap">${hintChips}</div>
+        <button class="vic-cancel-btn" onclick="cancelVoiceInline()">Cancel</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('chatFlow').appendChild(row);
+  scrollToBottom();
+}
+
+function cancelVoiceInline() {
+  voiceMode = false;
+  const row = document.getElementById('voiceInlineCardRow');
+  if (row) row.remove();
+  // Re-enable all chips so user can try again
+  document.querySelectorAll('#mainOptions .chip').forEach(c => c.classList.remove('selected', 'disabled'));
+}
+
+// Handles a command from the inline listening card or hint chips below the player.
+// Adds a user bubble first so it reads as part of the conversation.
+function inlineVoiceCommand(command) {
+  // Dismiss the listening card if visible
+  const inlineRow = document.getElementById('voiceInlineCardRow');
+  if (inlineRow) inlineRow.remove();
+
+  // Show command as a user message with a mic icon
+  const userRow = document.createElement('div');
+  userRow.className = 'msg-row user';
+  userRow.innerHTML = `<div class="bubble bubble-user" style="display:flex;align-items:center;gap:6px;">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.75;flex-shrink:0"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+    <span>${command}</span>
+  </div>`;
+  document.getElementById('chatFlow').appendChild(userRow);
+  scrollToBottom();
+
+  // Brief thinking pause then process (bypass executeVoiceCommand's own bubble)
+  addTypingIndicator();
+  setTimeout(() => {
+    removeTypingIndicator();
+    processVoiceCommand(command);
+  }, 650);
+}
+
+function openVoiceOverlay() {
+  voiceMode = true;
+  const overlay = document.getElementById('voiceOverlay');
+  overlay.classList.add('active');
+
+  // Show 4 random hints
+  const chips = document.getElementById('voiceHintChips');
+  const shuffled = allVoiceHints.sort(() => 0.5 - Math.random()).slice(0, 4);
+  chips.innerHTML = shuffled.map(h =>
+    `<button class="voice-hint-chip" onclick="executeVoiceCommand('${h.replace(/'/g, "\\'")}')">"${h}"</button>`
+  ).join('');
+
+  document.getElementById('voiceStatus').textContent = 'Listening...';
+  document.getElementById('voiceTranscript').textContent = '';
+
+  // Auto-simulate a command after 3s if user doesn't tap a chip
+  window._voiceAutoTimer = setTimeout(() => {
+    executeVoiceCommand('Play Lag Jaa Gale');
+  }, 8000);
+}
+
+function cancelVoice() {
+  clearTimeout(window._voiceAutoTimer);
+  document.getElementById('voiceOverlay').classList.remove('active');
+  voiceMode = false;
+}
+
+function executeVoiceCommand(command) {
+  clearTimeout(window._voiceAutoTimer);
+
+  // Show transcription in overlay
+  document.getElementById('voiceStatus').textContent = 'Got it!';
+  document.getElementById('voiceTranscript').textContent = `"${command}"`;
+
+  // Close overlay after brief delay
+  setTimeout(() => {
+    document.getElementById('voiceOverlay').classList.remove('active');
+
+    // Add user voice bubble to chat
+    const userRow = document.createElement('div');
+    userRow.className = 'msg-row user';
+    userRow.innerHTML = `<div class="bubble bubble-user"><svg viewBox="0 0 24 24" width="14" height="14" style="fill:white;margin-right:4px;vertical-align:-2px;"><path d="M12 15a3 3 0 003-3V5a3 3 0 00-6 0v7a3 3 0 003 3zm6-5a1 1 0 00-1 1v1a5 5 0 11-10 0v-1a1 1 0 10-2 0v1a7 7 0 1014 0v-1a1 1 0 00-1-1zm-3 10H9a1 1 0 000 2h6a1 1 0 000-2z"/></svg>${command}</div>`;
+    document.getElementById('chatFlow').appendChild(userRow);
+    scrollToBottom();
+
+    // Process the command
+    setTimeout(() => {
+      addTypingIndicator();
+      setTimeout(() => {
+        removeTypingIndicator();
+        processVoiceCommand(command);
+      }, 800);
+    }, 300);
+  }, 600);
+}
+
+function addAIResponseWithChips(html, chipLabels) {
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  const chipsHtml = chipLabels.map(c =>
+    `<button class="voice-hint-chip" onclick="inlineVoiceCommand('${c.replace(/^["']|["']$/g,'').replace(/'/g,"\\'")}')"><em>${c}</em></button>`
+  ).join('');
+  row.innerHTML = `
+    ${AVATAR_HTML}
+    <div style="flex:1;min-width:0;">
+      <div class="bubble bubble-ai" style="max-width:100%;">${html}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+        ${chipsHtml}
+      </div>
+    </div>
+  `;
+  document.getElementById('chatFlow').appendChild(row);
+  scrollToBottom();
+}
+
+function processVoiceCommand(command) {
+  const cmdLower = command.toLowerCase();
+
+  if (cmdLower.startsWith('play ') && !cmdLower.includes('song')) {
+    const songName = command.substring(5);
+    const song = voiceSongDB.find(s => s.title.toLowerCase().includes(songName.toLowerCase())) || voiceSongDB[0];
+    voicePlaySong(song, `Playing <strong>${song.title}</strong> for you`);
+  } else if (cmdLower.includes('next') || cmdLower.includes('skip')) {
+    voiceQueueIndex = (voiceQueueIndex + 1) % voiceSongDB.length;
+    const song = voiceSongDB[voiceQueueIndex];
+    voicePlaySong(song, `Up next — <strong>${song.title}</strong>`);
+  } else if (cmdLower.includes('previous') || cmdLower.includes('go back')) {
+    voiceQueueIndex = voiceQueueIndex > 0 ? voiceQueueIndex - 1 : voiceSongDB.length - 1;
+    const song = voiceSongDB[voiceQueueIndex];
+    voicePlaySong(song, `Going back to <strong>${song.title}</strong>`);
+  } else if (cmdLower.includes('pause') || cmdLower.includes('stop')) {
+    isPlaying = false;
+    const pb = document.getElementById('vnpPlayBtn');
+    if (pb) pb.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+    addAIResponseWithChips('Paused. Ready when you are.', ['"Resume"', '"Next song"', '"Something romantic"']);
+  } else if (cmdLower.includes('resume') || (cmdLower === 'play')) {
+    isPlaying = true;
+    const pb = document.getElementById('vnpPlayBtn');
+    if (pb) pb.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+    addAIResponseWithChips('Resuming!', ['"Next song"', '"Something romantic"', '"Pause"']);
+  } else if (cmdLower.includes('romantic') || cmdLower.includes('something romantic')) {
+    const song = voiceSongDB[0]; // Lag Jaa Gale
+    voicePlaySong(song, 'Setting the mood — something beautiful and timeless for you');
+  } else if (cmdLower.includes('peppy') || cmdLower.includes('upbeat') || cmdLower.includes('something peppy')) {
+    const song = voiceSongDB[5]; // Pehla Nasha
+    voicePlaySong(song, 'Turning up the energy! Here\'s something feel-good');
+  } else if (cmdLower.includes('monsoon') || cmdLower.includes('rainy')) {
+    const song = voiceSongDB[1]; // Rimjhim Gire Sawan
+    voicePlaySong(song, 'Perfect for the rain — here\'s a monsoon classic');
+  } else if (cmdLower.includes('kishore kumar') || cmdLower.includes('by kishore') || cmdLower.includes('play kishore')) {
+    const song = voiceSongDB[1]; // Rimjhim Gire Sawan
+    voicePlaySong(song, 'A Kishore Kumar legend, coming right up');
+  } else if (cmdLower.includes('90s') || cmdLower.includes('nostalgia')) {
+    const song = voiceSongDB[5]; // Pehla Nasha
+    voicePlaySong(song, 'Taking you back to the golden 90s...');
+  } else if (cmdLower.includes('heartbreak') || cmdLower.includes('sad')) {
+    const song = voiceSongDB[4]; // Channa Mereya
+    voicePlaySong(song, 'Some songs understand us better than words can. Here\'s one.');
+  } else if (cmdLower.includes('lata') || cmdLower.includes('mangeshkar')) {
+    const song = voiceSongDB[0]; // Lag Jaa Gale
+    voicePlaySong(song, 'The queen of melody — nobody does it like Lata ji');
+  } else if (cmdLower.includes('arijit')) {
+    const song = voiceSongDB[2]; // Tum Hi Ho
+    voicePlaySong(song, 'Arijit Singh — the voice of a generation');
+  } else if (cmdLower.includes('dedicate') || cmdLower.includes('dedication')) {
+    addAIResponseWithChips('Aww, who\'s this dedication for?', ['"For someone special"', '"For my best friend"', '"For my mom"']);
+  } else if (cmdLower.includes('trivia') || cmdLower.includes('tell me about') || cmdLower.includes('fun fact')) {
+    const cur = voiceSongDB[voiceQueueIndex];
+    if (cur && cur.trivia) {
+      addAIResponseWithChips(`<strong>Did you know?</strong><br><br>${cur.trivia}`, ['"Next song"', '"Dedicate this song"', '"Something romantic"']);
+    }
+  } else if (cmdLower.includes('surprise') || cmdLower.includes('you pick') || cmdLower.includes('you choose') || cmdLower.includes('anything')) {
+    const song = voiceSongDB[Math.floor(Math.random() * voiceSongDB.length)];
+    voicePlaySong(song, `I think you\'ll love this one — <strong>${song.title}</strong>`);
+  } else {
+    const song = voiceSongDB[0];
+    voicePlaySong(song, `Playing <strong>${song.title}</strong> for you`);
+  }
+}
+
+function voicePlaySong(song, aiMessage) {
+  voiceQueueIndex = voiceSongDB.indexOf(song);
+  if (voiceQueueIndex === -1) voiceQueueIndex = 0;
+  isPlaying = true;
+  playSongAudio(song);
+  window._currentTracks = voiceSongDB;
+  window._currentTrackIndex = voiceQueueIndex;
+
+  // Remove old now-playing row if exists (song changed)
+  const oldRow = document.getElementById('voiceNowPlayingRow');
+  if (oldRow) oldRow.remove();
+
+  // Remove old hint row if exists
+  const oldHint = document.getElementById('voiceCommandHintRow');
+  if (oldHint) oldHint.remove();
+
+  renderVoiceNowPlaying(song, aiMessage || null, song.chips || ['Next song', 'Pause', 'Something romantic']);
+}
+
+function renderVoiceNowPlaying(song, aiMessage, chips) {
+  const idx = voiceQueueIndex;
+  const lyrics = song.lyrics || sampleLyrics;
+  const lyricsHtml = lyrics.map((line, i) =>
+    line ? `<div class="vnp-lyrics-line${i === 2 ? ' active' : ''}">${line}</div>` : '<div style="height:10px;"></div>'
+  ).join('');
+
+  const queueHtml = voiceSongDB.map((s, i) => `
+    <div class="vnp-queue-item${i === idx ? ' playing' : ''}" onclick="voicePlaySong(voiceSongDB[${i}])">
+      <div class="vnp-qi-num">${i === idx ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="fill:var(--sparkle)"><path d="M8 5v14l11-7z"/></svg>' : (i + 1)}</div>
+      <img class="vnp-qi-art" src="${s.img}" alt="">
+      <div class="vnp-qi-info">
+        <div class="vnp-qi-title">${s.title}</div>
+        <div class="vnp-qi-artist">${s.artist}</div>
+      </div>
+      <div class="vnp-qi-dur">${s.dur}</div>
+    </div>
+  `).join('');
+
+  const chipsHtml = (chips || []).map(c =>
+    `<button class="voice-hint-chip" onclick="inlineVoiceCommand('${c.replace(/'/g, "\\'")}')">${c}</button>`
+  ).join('');
+
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.id = 'voiceNowPlayingRow';
+  row.innerHTML = `
+    ${AVATAR_HTML}
+    <div style="flex:1;min-width:0;">
+      ${aiMessage ? `<div class="bubble bubble-ai" style="max-width:100%;margin-bottom:10px;">${aiMessage}</div>` : ''}
+      <div class="vnp-card" id="voiceNowPlayingCard">
+
+      <!-- ── Main now-playing view ── -->
+      <div id="vnpMain">
+        <div class="vnp-art">
+          <img src="${song.img}" alt="${song.title}" id="vnpCoverImg">
+          <div class="vnp-art-gradient"></div>
+          <div class="vnp-art-header">
+            <button class="vnp-art-btn" onclick="toggleVoicePanel('lyrics')">
+              <svg viewBox="0 0 24 24"><path d="M3 18h12v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+              Full Lyrics
+            </button>
+            <button class="vnp-art-btn" onclick="toggleVoicePanel('queue')">
+              <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="vnp-info">
+          <div class="vnp-title" id="vnpTitle">${song.title}</div>
+          <div class="vnp-artist" id="vnpArtist">${song.artist} · ${song.film}</div>
+        </div>
+
+        <div class="vnp-progress-wrap">
+          <div class="vnp-progress-track">
+            <div class="vnp-progress-fill" id="vnpProgressFill"></div>
+          </div>
+          <div class="vnp-time-row">
+            <span id="vnpTimeCurrent">0:00</span>
+            <span id="vnpTimeDuration">${song.dur}</span>
+          </div>
+        </div>
+
+        <div class="vnp-controls">
+          <button class="vnp-ctrl" onclick="voiceSkip(-1)">
+            <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+          <button class="vnp-play-btn" id="vnpPlayBtn" onclick="toggleVoicePlay()">
+            <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button class="vnp-ctrl" onclick="voiceSkip(1)">
+            <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+        </div>
+
+        <div class="vnp-actions">
+          <button class="vnp-act-btn" id="vnpLikeBtn" onclick="this.classList.toggle('active')">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            Like
+          </button>
+          <button class="vnp-act-btn">
+            <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+            Save
+          </button>
+          <button class="vnp-act-btn">
+            <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+            Share
+          </button>
+          <button class="vnp-act-btn">
+            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            More
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Lyrics panel ── -->
+      <div class="vnp-lyrics-panel" id="vnpLyricsPanel" style="display:none">
+        <div class="vnp-panel-header">
+          <img class="vnp-mini-art" id="vnpLyricsArt" src="${song.img}" alt="">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:13px;font-weight:700;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="vnpLyricsTitle">${song.title}</div>
+            <div style="font-size:11px;opacity:0.55;color:white;" id="vnpLyricsArtist">${song.artist}</div>
+          </div>
+          <button class="vnp-panel-back" onclick="toggleVoicePanel('main')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+        </div>
+        <div class="vnp-lyrics-text" id="vnpLyricsText">${lyricsHtml}</div>
+      </div>
+
+      <!-- ── Queue panel ── -->
+      <div class="vnp-queue-panel" id="vnpQueuePanel" style="display:none">
+        <div class="vnp-panel-header">
+          <div style="flex:1;font-size:16px;font-weight:900;color:white;">Up Next</div>
+          <button class="vnp-panel-back" onclick="toggleVoicePanel('main')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+        </div>
+        <div class="vnp-queue-list" id="vnpQueueList">${queueHtml}</div>
+      </div>
+
+      </div><!-- end vnp-card -->
+      ${chipsHtml ? `
+        <div id="vnpChipsWrap" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;">
+          ${chipsHtml}
+        </div>
+      ` : ''}
+    </div><!-- end flex wrapper -->
+  `;
+  document.getElementById('chatFlow').appendChild(row);
+  scrollToBottom();
+}
+
+function toggleVoicePanel(panel) {
+  const main = document.getElementById('vnpMain');
+  const lyrics = document.getElementById('vnpLyricsPanel');
+  const queue = document.getElementById('vnpQueuePanel');
+  if (!main) return;
+  main.style.display = panel === 'main' ? 'block' : 'none';
+  lyrics.style.display = panel === 'lyrics' ? 'block' : 'none';
+  queue.style.display = panel === 'queue' ? 'block' : 'none';
+}
+
+function toggleVoicePlay() {
+  isPlaying = !isPlaying;
+  isPlaying ? resumeSongAudio() : pauseSongAudio();
+  const btn = document.getElementById('vnpPlayBtn');
+  if (!btn) return;
+  btn.innerHTML = isPlaying
+    ? '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'
+    : '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+}
+
+function addAIResponse(html) {
+  const aiRow = document.createElement('div');
+  aiRow.className = 'msg-row';
+  aiRow.innerHTML = `
+    ${AVATAR_HTML}
+    <div>
+      <div class="bubble bubble-ai">${html}</div>
+      ${FEEDBACK_HTML}
+    </div>
+  `;
+  document.getElementById('chatFlow').appendChild(aiRow);
+  scrollToBottom();
+}
+
+function voiceSkip(dir) {
+  voiceQueueIndex = (voiceQueueIndex + dir + voiceSongDB.length) % voiceSongDB.length;
+  const song = voiceSongDB[voiceQueueIndex];
+  isPlaying = true;
+  playSongAudio(song);
+  window._currentTrackIndex = voiceQueueIndex;
+
+  // Update vnp-card if present
+  const cover = document.getElementById('vnpCoverImg');
+  if (cover) {
+    cover.src = song.img;
+    document.getElementById('vnpTitle').textContent = song.title;
+    document.getElementById('vnpArtist').textContent = `${song.artist} · ${song.film}`;
+    document.getElementById('vnpTimeDuration').textContent = song.dur;
+    document.getElementById('vnpTimeCurrent').textContent = '0:00';
+    document.getElementById('vnpProgressFill').style.width = '0%';
+    document.getElementById('vnpPlayBtn').innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+    // Update lyrics panel header
+    const la = document.getElementById('vnpLyricsArt');
+    if (la) la.src = song.img;
+    const lt = document.getElementById('vnpLyricsTitle');
+    if (lt) lt.textContent = song.title;
+    const lar = document.getElementById('vnpLyricsArtist');
+    if (lar) lar.textContent = song.artist;
+    // Refresh lyrics text
+    const lyrics = song.lyrics || sampleLyrics;
+    const lyricsHtml = lyrics.map((line, i) =>
+      line ? `<div class="vnp-lyrics-line${i === 2 ? ' active' : ''}">${line}</div>` : '<div style="height:10px;"></div>'
+    ).join('');
+    const lt2 = document.getElementById('vnpLyricsText');
+    if (lt2) lt2.innerHTML = lyricsHtml;
+    // Refresh queue list
+    const idx = voiceQueueIndex;
+    const queueHtml = voiceSongDB.map((s, i) => `
+      <div class="vnp-queue-item${i === idx ? ' playing' : ''}" onclick="voicePlaySong(voiceSongDB[${i}])">
+        <div class="vnp-qi-num">${i === idx ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="fill:var(--sparkle)"><path d="M8 5v14l11-7z"/></svg>' : (i + 1)}</div>
+        <img class="vnp-qi-art" src="${s.img}" alt="">
+        <div class="vnp-qi-info">
+          <div class="vnp-qi-title">${s.title}</div>
+          <div class="vnp-qi-artist">${s.artist}</div>
+        </div>
+        <div class="vnp-qi-dur">${s.dur}</div>
+      </div>
+    `).join('');
+    const ql = document.getElementById('vnpQueueList');
+    if (ql) ql.innerHTML = queueHtml;
+    // Refresh contextual chips
+    const cw = document.getElementById('vnpChipsWrap');
+    if (cw) {
+      const songChips = song.chips || ['Next song', 'Pause', 'Something romantic'];
+      cw.innerHTML = songChips.map(c =>
+        `<button class="voice-hint-chip" onclick="inlineVoiceCommand('${c.replace(/'/g, "\\'")}')">${c}</button>`
+      ).join('');
+    }
+  }
+}
+
+function toggleChatMiniPlay() {
+  isPlaying = !isPlaying;
+  document.getElementById('chatMiniPlayBtn').innerHTML = isPlaying
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+}
+
+// ═══════════════════════════════════════
+// RJ & PODCAST — Icons, Data, State, Functions
+// ═══════════════════════════════════════
+
+const IC = {
+  like: '<svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>',
+  dislike: '<svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>',
+  copy: '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>',
+  share: '<svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>',
+  chevronR: '<svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  mic: '<svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>',
+  music: '<svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>',
+  headphones: '<svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>',
+  play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>',
+  skipPrev: '<svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>',
+  skipNext: '<svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>',
+  bolt: '<svg viewBox="0 0 24 24"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/></svg>',
+  moon: '<svg viewBox="0 0 24 24"><path d="M12.43 2.3c-2.38-.59-4.68-.27-6.63.64-.35.16-.41.64-.1.86C8.3 5.6 9.5 8.6 9.5 12c0 3.4-1.2 6.4-3.8 8.2-.31.22-.26.7.1.86 1.95.91 4.25 1.23 6.63.64 4.66-1.15 8.07-5.82 7.5-10.63-.44-3.73-3.14-6.94-7.5-8.77z"/></svg>',
+  brain: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-4h2v-2h-2v2zm0-4h2V7h-2v5z"/></svg>',
+  star: '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>',
+  heart: '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+  book: '<svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>',
+  news: '<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/></svg>',
+  health: '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/></svg>',
+  temple: '<svg viewBox="0 0 24 24"><path d="M6 20h12V10L12 3 6 10v10zm2-8h3v-3h2v3h3v2h-3v3h-2v-3H8v-2z"/></svg>',
+  finance: '<svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>',
+  tech: '<svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',
+  sword: '<svg viewBox="0 0 24 24"><path d="M19 3l-6 6-2-2-6 6 3 3 6-6 2 2 6-6-3-3zM3 19l2.5.5.5 2.5 3-3-3-3-3 3z"/></svg>',
+  whatsapp: '<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>',
+  person: '<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  clock: '<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
+  globe: '<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 00-1.38-3.56A8.03 8.03 0 0118.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.987 7.987 0 015.08 16zm2.95-8H5.08a7.987 7.987 0 014.33-3.56A15.65 15.65 0 008.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 01-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>',
+  settings: '<svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>',
+  send: '<svg viewBox="0 0 24 24"><path d="M3.4 20.4l17.45-7.48a1 1 0 000-1.84L3.4 3.6a.993.993 0 00-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91z"/></svg>',
+  route: '<svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>',
+};
+
+const contacts = [
+  { name: 'Meera Sharma', phone: '+91 98765 43210', initials: 'MS', color: '#FF6B35' },
+  { name: 'Rahul Gupta', phone: '+91 87654 32109', initials: 'RG', color: '#7C4DFF' },
+  { name: 'Priya Iyer', phone: '+91 76543 21098', initials: 'PI', color: '#00BCD4' },
+  { name: 'Aarav Patel', phone: '+91 65432 10987', initials: 'AP', color: '#25ab21' },
+  { name: 'Kavya Nair', phone: '+91 54321 09876', initials: 'KN', color: '#fa2f40' },
+];
+
+const personas = [
+  { id: 'energetic', name: 'Sunny', desc: 'Upbeat, fun, morning energy', color: '#FF6B35', bgLight: '#FFF3ED' },
+  { id: 'calm', name: 'Nidhi', desc: 'Soothing, thoughtful, evening vibe', color: '#7C4DFF', bgLight: '#F3EDFF' },
+  { id: 'witty', name: 'Arjun', desc: 'Sharp, humorous, trivia-lover', color: '#00BCD4', bgLight: '#E0F7FA' },
+];
+
+const rjPlaylist = [
+  { title: 'Tum Hi Ho', artist: 'Arijit Singh', album: 'Aashiqui 2', duration: '4:22' },
+  { title: 'Kal Ho Naa Ho', artist: 'Sonu Nigam', album: 'Kal Ho Naa Ho', duration: '5:18' },
+  { title: 'Tere Bina', artist: 'A.R. Rahman', album: 'Guru', duration: '5:42' },
+  { title: 'Channa Mereya', artist: 'Arijit Singh', album: 'Ae Dil Hai Mushkil', duration: '4:49' },
+  { title: 'Kabira', artist: 'Tochi Raina', album: 'Yeh Jawaani Hai Deewani', duration: '3:44' },
+];
+
+const interludes = [
+  { text: "That was Arijit Singh \u2014 did you know he recorded \u2018Tum Hi Ho\u2019 in a single take? The director wanted raw emotion, and Arijit delivered without a retake. Speaking of new releases, Arijit dropped a new album this Friday. Want to hear it?", cta: 'Haan, sunao!' },
+  { text: "I noticed you\u2019ve been playing romantic tracks this evening, Shreya. Tuesday nights are your Sufi zone \u2014 should I switch to that?", cta: 'Switch to Sufi' },
+  { text: "Shreya, you have a song dedication! Meera dedicated \u2018Tere Bina\u2019 to you today. Here it is\u2026", cta: 'Play dedication' },
+];
+
+const podcastsData = [
+  { id: 1, title: 'Thirukkural Today', lang: 'Tamil', topic: 'Spiritual', duration: '10 min', episodes: 142, color: '#FF6B35', bgLight: '#FFF3ED', icon: 'temple' },
+  { id: 2, title: 'Chennai Finance Hour', lang: 'Tamil', topic: 'Finance', duration: '12 min', episodes: 89, color: '#00BCD4', bgLight: '#E0F7FA', icon: 'finance' },
+  { id: 3, title: 'Subah ka Sach', lang: 'Hindi', topic: 'News', duration: '8 min', episodes: 203, color: '#25ab21', bgLight: '#E6F7E6', icon: 'news' },
+  { id: 4, title: 'Sehat ki Baat', lang: 'Hindi', topic: 'Health', duration: '10 min', episodes: 167, color: '#fa2f40', bgLight: '#FDE8EA', icon: 'health' },
+  { id: 5, title: 'Ponniyin Selvan History', lang: 'Tamil', topic: 'History', duration: '12 min', episodes: 45, color: '#7C4DFF', bgLight: '#F3EDFF', icon: 'sword' },
+  { id: 6, title: 'Telugu Tech Tips', lang: 'Telugu', topic: 'Tech', duration: '8 min', episodes: 78, color: '#3535f3', bgLight: '#E8E8FC', icon: 'tech' },
+  { id: 7, title: 'Mind & Money', lang: 'English', topic: 'Finance', duration: '15 min', episodes: 64, color: '#00BCD4', bgLight: '#E0F7FA', icon: 'finance' },
+  { id: 8, title: 'The Daily Wrap', lang: 'English', topic: 'News', duration: '10 min', episodes: 312, color: '#25ab21', bgLight: '#E6F7E6', icon: 'news' },
+  { id: 9, title: 'Wellness with Jio', lang: 'English', topic: 'Health', duration: '12 min', episodes: 95, color: '#fa2f40', bgLight: '#FDE8EA', icon: 'health' },
+  { id: 10, title: 'Naye Rishte', lang: 'Hindi', topic: 'Spiritual', duration: '10 min', episodes: 56, color: '#FF6B35', bgLight: '#FFF3ED', icon: 'temple' },
+  { id: 11, title: 'Code & Chai', lang: 'English', topic: 'Tech', duration: '8 min', episodes: 41, color: '#3535f3', bgLight: '#E8E8FC', icon: 'tech' },
+  { id: 12, title: 'Hyderabad Bytes', lang: 'Telugu', topic: 'News', duration: '10 min', episodes: 130, color: '#25ab21', bgLight: '#E6F7E6', icon: 'news' },
+];
+
+// RJ/Podcast state
+let selectedPersona = null;
+let currentSong = 0;
+let songProgress = 0;
+let sessionTime = 0;
+let songInterval = null;
+let showingInterlude = false;
+let interludeShown = false;
+let selectedPodcast = null;
+let podcastPlaying = false;
+let podcastProgress = 0;
+let podcastInterval = null;
+let showingQA = false;
+let podcastPrefs = { length: 15, lang: 'All', journey: 'All' };
+
+const MINI_AVATAR_HTML = '<div class="mini-avatar"><video autoplay loop muted playsinline><source src="https://sunit1986.github.io/design-prototypes/Assets/HelloJio_Listening_241.mp4" type="video/mp4"></video></div>';
+
+function addMsg(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  while (tmp.firstChild) {
+    document.getElementById('chatFlow').appendChild(tmp.firstChild);
+  }
+  scrollToBottom();
+}
+
+function fmtTime(secs) {
+  const m = Math.floor(secs / 60);
+  const s = Math.floor(secs % 60);
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+// ═══════════════════════════════════
+// AI PERSONAL RJ -- Select persona
+// ═══════════════════════════════════
+function showRJSelect() {
+  addMsg(`<div class="thinking-row">${MINI_AVATAR_HTML}<span class="thinking-text">Setting up your RJ...</span></div>`);
+
+  setTimeout(() => {
+    document.querySelectorAll('.thinking-row').forEach(e => e.remove());
+
+    const cards = personas.map(p => {
+      let iconSvg = IC.bolt;
+      if (p.id === 'calm') iconSvg = IC.moon;
+      if (p.id === 'witty') iconSvg = IC.brain;
+      return `<div class="persona-card" onclick="startRJ('${p.id}')">
+        <div class="persona-icon" style="background:${p.bgLight};color:${p.color}"><div style="width:22px;height:22px;fill:${p.color}">${iconSvg.replace('viewBox', `style="fill:${p.color}" viewBox`)}</div></div>
+        <div class="persona-info">
+          <div class="persona-name">${p.name}</div>
+          <div class="persona-desc">${p.desc}</div>
+        </div>
+        <div class="persona-arrow">${IC.chevronR}</div>
+      </div>`;
+    }).join('');
+
+    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+      <div class="ai-text"><p>Choose a personality for your personal radio station. The RJ will curate music, share trivia between songs, and respond to your voice requests.</p></div>
+      <div class="gap-8 mt-8">${cards}</div>
+      <div class="tradeoff-box mt-12">
+        <div class="tradeoff-label">How it works</div>
+        <div class="tradeoff-item">Speaks between songs only \u2014 companion, not radio</div>
+        <div class="tradeoff-item">No thumbs-up/rating \u2014 learns from your behaviour</div>
+        <div class="tradeoff-item">No playlists to manage \u2014 the RJ IS the playlist</div>
+        <div class="tradeoff-item">No push notifications \u2014 voluntary return only</div>
+      </div>
+      ${FEEDBACK_HTML}
+    </div></div>`);
+  }, 1200);
+}
+
+// ═══════════════════════════════════
+// AI PERSONAL RJ -- Now Playing
+// ═══════════════════════════════════
+function startRJ(personaId) {
+  selectedPersona = personas.find(p => p.id === personaId);
+  currentSong = 0;
+  songProgress = 0;
+  sessionTime = 0;
+  isPlaying = true;
+  interludeShown = false;
+
+  addMsg(`<div class="user-msg"><div class="user-bubble">Play with RJ ${selectedPersona.name}</div></div>`);
+
+  setTimeout(() => {
+    addMsg(`<div class="thinking-row">${MINI_AVATAR_HTML}<span class="thinking-text">RJ ${selectedPersona.name} is getting ready...</span></div>`);
+  }, 300);
+
+  setTimeout(() => {
+    document.querySelectorAll('.thinking-row').forEach(e => e.remove());
+    renderNowPlaying();
+    startSongProgress();
+  }, 1500);
+}
+
+function renderNowPlaying() {
+  const song = rjPlaylist[currentSong];
+  const p = selectedPersona;
+
+  addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+    <div class="ai-text"><p>Good evening, Shreya! It\u2019s a lovely Tuesday night \u2014 let\u2019s start with something that matches the mood.</p></div>
+
+    <div class="now-playing mt-8" id="npCard">
+      <div class="np-art" style="background:${p.bgLight}">
+        <div style="fill:${p.color}">${IC.music.replace('viewBox', `style="fill:${p.color};width:40px;height:40px" viewBox`)}</div>
+        <div class="np-pulse" style="border-color:${p.color}" id="npPulse"></div>
+      </div>
+      <div class="np-title" id="npTitle">${song.title}</div>
+      <div class="np-artist" id="npArtist">${song.artist} \u2022 ${song.album}</div>
+      <div class="np-progress">
+        <div class="np-bar-bg"><div class="np-bar-fill" id="npBar" style="width:0%;background:${p.color}"></div></div>
+        <div class="np-time"><span id="npTimeCur">0:00</span><span id="npTimeDur">${song.duration}</span></div>
+      </div>
+      <div class="np-controls">
+        <button class="ctrl-btn" onclick="prevSong()">${IC.skipPrev}</button>
+        <button class="ctrl-btn-main" id="playPauseBtn" onclick="togglePlay()" style="background:${p.color}">${IC.pause}</button>
+        <button class="ctrl-btn" onclick="nextSong()">${IC.skipNext}</button>
+      </div>
+      <div class="rj-badge">
+        <div class="rj-badge-dot" style="background:${p.color}"></div>
+        <span class="rj-badge-name">RJ ${p.name}</span>
+        <span class="rj-badge-time" id="sessionTimer">0:00</span>
+      </div>
+    </div>
+
+    <div class="quick-cmds mt-8">
+      <button class="qc-chip" onclick="rjCommand('Kuch Sufi bajao')">Kuch Sufi bajao</button>
+      <button class="qc-chip" onclick="rjCommand('Phir se bajao')">Phir se bajao</button>
+      <button class="qc-chip qc-dedicate" onclick="rjCommand('Dedicate to someone')">${IC.heart} Dedicate this song</button>
+      <button class="qc-chip" onclick="rjCommand('Iska cover version?')">Iska cover version?</button>
+    </div>
+
+    ${FEEDBACK_HTML}
+  </div></div>`);
+}
+
+function startSongProgress() {
+  if (songInterval) clearInterval(songInterval);
+  songInterval = setInterval(() => {
+    if (!isPlaying) return;
+    songProgress += 5;
+    sessionTime++;
+    const bar = document.getElementById('npBar');
+    const curTime = document.getElementById('npTimeCur');
+    const timer = document.getElementById('sessionTimer');
+    if (bar) bar.style.width = Math.min(songProgress, 100) + '%';
+    if (curTime) curTime.textContent = fmtTime(songProgress * 2.7);
+    if (timer) timer.textContent = fmtTime(Math.floor(sessionTime / 10));
+
+    if (songProgress >= 100) {
+      clearInterval(songInterval);
+      songInterval = null;
+      isPlaying = false;
+      songProgress = 100;
+
+      const npCard = document.querySelector('.now-playing');
+      if (npCard) {
+        npCard.classList.add('np-complete');
+        setTimeout(() => npCard.classList.remove('np-complete'), 600);
+      }
+
+      if (!interludeShown) {
+        interludeShown = true;
+        setTimeout(() => showInterlude(), 700);
+      } else {
+        setTimeout(() => {
+          currentSong = (currentSong + 1) % rjPlaylist.length;
+          songProgress = 0;
+          isPlaying = true;
+          updateSongDisplay();
+        }, 800);
+      }
+    }
+  }, 100);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  const btn = document.getElementById('playPauseBtn');
+  const pulse = document.getElementById('npPulse');
+  if (btn) btn.innerHTML = isPlaying ? IC.pause : IC.play;
+  if (pulse) pulse.style.animationPlayState = isPlaying ? 'running' : 'paused';
+  if (isPlaying && !songInterval) startSongProgress();
+}
+
+function nextSong() {
+  currentSong = (currentSong + 1) % rjPlaylist.length;
+  songProgress = 0;
+  updateSongDisplay();
+}
+
+function prevSong() {
+  currentSong = Math.max(0, currentSong - 1);
+  songProgress = 0;
+  updateSongDisplay();
+}
+
+function updateSongDisplay() {
+  const song = rjPlaylist[currentSong];
+  const el = (id) => document.getElementById(id);
+  if (el('npTitle')) el('npTitle').textContent = song.title;
+  if (el('npArtist')) el('npArtist').textContent = `${song.artist} \u2022 ${song.album}`;
+  if (el('npTimeDur')) el('npTimeDur').textContent = song.duration;
+  if (el('npBar')) el('npBar').style.width = '0%';
+  if (el('npTimeCur')) el('npTimeCur').textContent = '0:00';
+  isPlaying = true;
+  const btn = document.getElementById('playPauseBtn');
+  if (btn) btn.innerHTML = IC.pause;
+  startSongProgress();
+}
+
+function showInterlude() {
+  const il = interludes[currentSong % interludes.length];
+
+  addMsg(`<div class="thinking-row rj-thinking-row">${MINI_AVATAR_HTML}<span class="thinking-text">RJ ${selectedPersona.name} is speaking\u2026</span></div>`);
+
+  setTimeout(() => {
+    document.querySelectorAll('.rj-thinking-row').forEach(e => e.remove());
+
+    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+      <div class="interlude-card">
+        <div class="interlude-header">
+          <div class="il-dot" style="background:${selectedPersona.color}"></div>
+          <span class="il-label">RJ ${selectedPersona.name} says:</span>
+        </div>
+        <div class="interlude-text">${il.text}</div>
+        <div class="interlude-actions">
+          <button class="il-btn-primary" onclick="rjInterludeAction('${il.cta}')" style="background:${selectedPersona.color}">${il.cta}</button>
+          <button class="il-btn-secondary" onclick="rjInterludeAction('Skip, next song')">Skip</button>
+        </div>
+      </div>
+    </div></div>`);
+  }, 1200);
+}
+
+function dismissInterlude() {
+  currentSong = (currentSong + 1) % rjPlaylist.length;
+  songProgress = 0;
+  isPlaying = true;
+  if (songInterval) { clearInterval(songInterval); songInterval = null; }
+  updateSongDisplay();
+}
+
+function rjInterludeAction(cta) {
+  addMsg(`<div class="user-msg"><div class="user-bubble">${cta}</div></div>`);
+  setTimeout(() => dismissInterlude(), 500);
+}
+
+function rjCommand(cmd) {
+  addMsg(`<div class="user-msg"><div class="user-bubble">${cmd}</div></div>`);
+
+  setTimeout(() => {
+    let response = '';
+    const c = cmd.toLowerCase();
+    if (c.includes('sufi')) response = 'Shifting to Sufi tracks for you, Shreya. Here\u2019s a beautiful one\u2026';
+    else if (c.includes('dedicate') || c.includes('meera')) {
+      showDedicationFlow();
+      return;
+    }
+    else if (c.includes('phir') || c.includes('again')) response = 'Playing it again \u2014 good taste never gets old!';
+    else if (c.includes('version') || c.includes('cover')) response = 'This song was covered by Shreya Ghoshal in 2019 \u2014 want to hear that version?';
+    else response = `Got it! Let me find something that matches \u201C${cmd}\u201D for you\u2026`;
+
+    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+      <div class="rj-response">${response}</div>
+      <div class="quick-cmds mt-8">
+        <button class="qc-chip" onclick="rjCommand('Kuch Sufi bajao')">Kuch Sufi bajao</button>
+        <button class="qc-chip" onclick="rjCommand('Next song please')">Next song</button>
+        <button class="qc-chip qc-dedicate" onclick="rjCommand('Dedicate to someone')">${IC.heart} Dedicate</button>
+        <button class="qc-chip" onclick="endRJSession()">End session</button>
+      </div>
+      ${FEEDBACK_HTML}
+    </div></div>`);
+  }, 600);
+}
+
+// ═══════════════════════════════════
+// DEDICATION FLOW
+// ═══════════════════════════════════
+function showDedicationFlow() {
+  const song = rjPlaylist[currentSong];
+  const contactCards = contacts.map(c => `
+    <div class="contact-card" onclick="sendDedication('${c.name}', '${c.initials}', '${c.color}')">
+      <div class="contact-avatar" style="background:${c.color}">${c.initials}</div>
+      <div class="contact-info">
+        <div class="contact-name">${c.name}</div>
+        <div class="contact-phone">${c.phone}</div>
+      </div>
+      <div class="contact-send-icon">${IC.send}</div>
+    </div>`).join('');
+
+  addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+    <div class="ai-text"><p>Who would you like to dedicate <strong>\u201C${song.title}\u201D</strong> to? Pick a contact below:</p></div>
+    <div class="contact-list mt-8">${contactCards}</div>
+    ${FEEDBACK_HTML}
+  </div></div>`);
+}
+
+function sendDedication(name, initials, color) {
+  addMsg(`<div class="user-msg"><div class="user-bubble">Send to ${name}</div></div>`);
+
+  setTimeout(() => {
+    addMsg(`<div class="thinking-row">${MINI_AVATAR_HTML}<span class="thinking-text">Preparing dedication for ${name}...</span></div>`);
+  }, 300);
+
+  setTimeout(() => {
+    document.querySelectorAll('.thinking-row').forEach(e => e.remove());
+    const song = rjPlaylist[currentSong];
+    const p = selectedPersona;
+
+    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+      <div class="ded-card-hero">
+        <div class="ded-hero-header">
+          <div class="ded-hero-icon">${IC.heart}</div>
+          <div>
+            <div class="ded-hero-title">Song Dedicated to ${name}!</div>
+            <div class="ded-hero-subtitle">From Shreya, with love</div>
+          </div>
+        </div>
+        <div class="ded-hero-body">
+          <div class="ded-hero-song">
+            <div class="ded-song-art">${IC.music}</div>
+            <div>
+              <div class="ded-song-name">${song.title}</div>
+              <div class="ded-song-artist">${song.artist} \u2022 ${song.album}</div>
+            </div>
+          </div>
+          <div class="ded-msg">\u201CThis one\u2019s for you, ${name.split(' ')[0]}. Every time I hear this song, I think of you.\u201D</div>
+          <div class="ded-share-row">
+            <button class="ded-play-btn" onclick="void(0)">${IC.play} Play now</button>
+            <button class="ded-share-wa" onclick="void(0)">${IC.whatsapp} Send via WhatsApp</button>
+          </div>
+        </div>
+      </div>
+      <div class="ai-text mt-12"><p>RJ ${p.name}: <em>\u201CThat\u2019s a beautiful dedication, Shreya! ${name.split(' ')[0]} is going to love this one. Music is the best gift, isn\u2019t it?\u201D</em></p></div>
+      <div class="quick-cmds mt-12">
+        <button class="qc-chip" onclick="rjCommand('Continue with same RJ')">Continue with RJ ${selectedPersona ? selectedPersona.name : ''}</button>
+        <button class="qc-chip" onclick="rjCommand('Kuch Sufi bajao')">More songs</button>
+        <button class="qc-chip" onclick="endRJSession()">End session</button>
+      </div>
+      ${FEEDBACK_HTML}
+    </div></div>`);
+  }, 1200);
+}
+
+function endRJSession() {
+  if (songInterval) clearInterval(songInterval);
+  isPlaying = false;
+  addMsg(`<div class="user-msg"><div class="user-bubble">End session</div></div>`);
+  setTimeout(() => {
+    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+      <div class="ai-text"><p>That's a wrap, Shreya! You listened for ${fmtTime(Math.floor(sessionTime / 10))} today.</p>
+      <p style="font-size:12px;color:var(--text-low);margin-top:6px;">No lingering notifications. No daily reminders. I'll be here when you want it.</p></div>
+      <div class="quick-cmds mt-8">
+        <button class="qc-chip" onclick="resetAll()">Start fresh</button>
+        <button class="qc-chip" onclick="showRJSelect()">Switch RJ</button>
+      </div>
+      ${FEEDBACK_HTML}
+    </div></div>`);
+  }, 600);
+}
+
+// ═══════════════════════════════════
+// PODCAST FACTORY -- Preferences + List
+// ═══════════════════════════════════
+function showPodcastList() {
+  addMsg(`<div class="user-msg"><div class="user-bubble">Show me podcasts</div></div>`);
+
+  setTimeout(() => {
+    addMsg(`<div class="thinking-row">${MINI_AVATAR_HTML}<span class="thinking-text">Let\u2019s personalise your podcast feed...</span></div>`);
+  }, 300);
+
+  setTimeout(() => {
+    document.querySelectorAll('.thinking-row').forEach(e => e.remove());
+    showPodcastPreferences();
+  }, 800);
+}
+
+function showPodcastPreferences() {
+  const langs = ['All', 'Tamil', 'Hindi', 'Telugu', 'English'];
+  const journeys = ['All', 'Spiritual', 'Finance', 'News', 'Health', 'History', 'Tech'];
+
+  const makeChips = (arr, prefKey) => arr.map(v =>
+    `<button class="pref-chip${podcastPrefs[prefKey] === v ? ' selected' : ''}" onclick="setPodcastPref('${prefKey}','${v}')">${v}</button>`
+  ).join('');
+
+  const prev = document.getElementById('podcastPrefBlock');
+  if (prev) prev.remove();
+
+  addMsg(`<div class="ai-msg" id="podcastPrefBlock">${AVATAR_HTML}<div class="ai-content">
+    <div class="ai-text"><p><strong>Set your preferences</strong></p><p>Help me pick the best podcasts for you.</p></div>
+
+    <div class="pref-section mt-12">
+      <div class="pref-label">${IC.clock} Episode length</div>
+      <div class="pref-slider-wrap">
+        <input type="range" class="pref-slider" id="prefLengthSlider" min="5" max="45" step="5" value="${podcastPrefs.length}" style="background:linear-gradient(to right, var(--primary-50) 0%, var(--primary-50) ${((podcastPrefs.length - 5) / 40) * 100}%, var(--grey-40) ${((podcastPrefs.length - 5) / 40) * 100}%, var(--grey-40) 100%)" oninput="updateLengthLabel(this.value)">
+        <div class="pref-slider-labels">
+          <span>5 min</span>
+          <span class="pref-slider-value" id="prefLengthVal">${podcastPrefs.length} min</span>
+          <span>45 min</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pref-section">
+      <div class="pref-label">${IC.globe} Language</div>
+      <div class="pref-chips" id="prefLang">${makeChips(langs, 'lang')}</div>
+    </div>
+
+    <div class="pref-section">
+      <div class="pref-label">${IC.route} Interest area</div>
+      <div class="pref-chips" id="prefJourney">${makeChips(journeys, 'journey')}</div>
+    </div>
+
+    <button class="pref-apply" onclick="applyPodcastPrefs()">
+      ${IC.headphones}<span>Show my podcasts</span>
+    </button>
+
+    ${FEEDBACK_HTML}
+  </div></div>`);
+}
+
+function setPodcastPref(key, val) {
+  podcastPrefs[key] = val;
+  showPodcastPreferences();
+}
+
+function updateLengthLabel(val) {
+  podcastPrefs.length = parseInt(val);
+  const label = document.getElementById('prefLengthVal');
+  if (label) label.textContent = val + ' min';
+  const slider = document.getElementById('prefLengthSlider');
+  if (slider) {
+    const pct = ((val - 5) / (45 - 5)) * 100;
+    slider.style.background = `linear-gradient(to right, var(--primary-50) 0%, var(--primary-50) ${pct}%, var(--grey-40) ${pct}%, var(--grey-40) 100%)`;
+  }
+}
+
+function applyPodcastPrefs() {
+  addMsg(`<div class="user-msg"><div class="user-bubble">${podcastPrefs.length} min \u2022 ${podcastPrefs.lang} \u2022 ${podcastPrefs.journey}</div></div>`);
+
+  setTimeout(() => {
+    addMsg(`<div class="thinking-row">${MINI_AVATAR_HTML}<span class="thinking-text">Curating podcasts for you...</span></div>`);
+  }, 300);
+
+  setTimeout(() => {
+    document.querySelectorAll('.thinking-row').forEach(e => e.remove());
+    renderPodcastList(podcastPrefs.lang, podcastPrefs.journey);
+  }, 800);
+}
+
+function renderPodcastList(lang, journey) {
+  lang = lang || 'All';
+  journey = journey || 'All';
+  let filtered = podcastsData.slice();
+  if (lang !== 'All') filtered = filtered.filter(p => p.lang === lang);
+  if (journey !== 'All') filtered = filtered.filter(p => p.topic.toLowerCase().includes(journey.toLowerCase()));
+  const maxLen = podcastPrefs.length || 45;
+  filtered = filtered.filter(p => {
+    const dur = parseInt(p.duration) || 0;
+    return dur <= maxLen;
+  });
+
+  const langBtns = ['All', 'Tamil', 'Hindi', 'Telugu', 'English'].map(l =>
+    `<button class="lang-btn${l === lang ? ' active' : ''}" onclick="filterPodcasts('${l}')">${l}</button>`
+  ).join('');
+
+  const prefTags = `<div class="pref-summary">
+    <span class="pref-tag">${IC.clock} ${podcastPrefs.length} min</span>
+    <span class="pref-tag">${IC.globe} ${podcastPrefs.lang}</span>
+    <span class="pref-tag">${IC.route} ${podcastPrefs.journey}</span>
+    <span class="pref-tag" style="cursor:pointer" onclick="showPodcastPreferences()">${IC.settings} Change</span>
+  </div>`;
+
+  if (!filtered.length) {
+    const prevEmpty = document.getElementById('podcastListBlock');
+    if (prevEmpty) prevEmpty.remove();
+
+    addMsg(`<div class="ai-msg" id="podcastListBlock">${AVATAR_HTML}<div class="ai-content">
+      <div class="ai-text"><p><strong>JioBharatIQ Originals</strong></p><p>Daily fresh episodes curated for you</p></div>
+      ${prefTags}
+      <div class="lang-filter mt-8">${langBtns}</div>
+      <div class="empty-state mt-12" style="text-align:center;padding:24px 0;">
+        <div style="font-size:14px;font-weight:600;color:var(--text-high);">No podcasts found</div>
+        <div style="font-size:12px;color:var(--text-low);margin-top:4px;">Try a different language or interest area</div>
+      </div>
+      ${FEEDBACK_HTML}
+    </div></div>`);
+    return;
+  }
+
+  const cards = filtered.map(p => {
+    const iconHTML = IC[p.icon] ? IC[p.icon].replace('viewBox', `style="fill:${p.color};width:22px;height:22px" viewBox`) : IC.headphones;
+    return `<div class="podcast-card" onclick="openPodcast(${p.id})">
+      <div class="podcast-icon" style="background:${p.bgLight}">${iconHTML}</div>
+      <div class="podcast-info">
+        <div class="podcast-title">${p.title}</div>
+        <div class="podcast-meta">${p.lang} \u2022 ${p.topic} \u2022 ${p.duration} \u2022 ${p.episodes} episodes</div>
+      </div>
+      <div class="podcast-arrow">${IC.chevronR}</div>
+    </div>`;
+  }).join('');
+
+  const prev = document.getElementById('podcastListBlock');
+  if (prev) prev.remove();
+
+  addMsg(`<div class="ai-msg" id="podcastListBlock">${AVATAR_HTML}<div class="ai-content">
+    <div class="ai-text"><p><strong>JioBharatIQ Originals</strong></p><p>Daily fresh episodes curated for you</p></div>
+    ${prefTags}
+    <div class="lang-filter mt-8">${langBtns}</div>
+    <div class="gap-8 mt-8">${cards}</div>
+    <div class="tradeoff-box mt-12">
+      <div class="tradeoff-label">About Originals</div>
+      <div class="tradeoff-item">Branded as JioBharatIQ Originals</div>
+      <div class="tradeoff-item">Pre-defined topics only, quality-controlled</div>
+      <div class="tradeoff-item">Health and finance content has human review gates</div>
+    </div>
+    ${FEEDBACK_HTML}
+  </div></div>`);
+}
+
+function filterPodcasts(lang) {
+  podcastPrefs.lang = lang;
+  const prev = document.getElementById('podcastListBlock');
+  if (prev) prev.remove();
+  renderPodcastList(lang, podcastPrefs.journey);
+}
+
+// ═══════════════════════════════════
+// PODCAST FACTORY -- Player
+// ═══════════════════════════════════
+function openPodcast(id) {
+  selectedPodcast = podcastsData.find(p => p.id === id);
+  podcastProgress = 0;
+  podcastPlaying = false;
+  showingQA = false;
+
+  addMsg(`<div class="user-msg"><div class="user-bubble">Play ${selectedPodcast.title}</div></div>`);
+
+  setTimeout(() => {
+    const p = selectedPodcast;
+    const iconHTML = IC[p.icon] ? IC[p.icon].replace('viewBox', `style="fill:${p.color};width:28px;height:28px" viewBox`) : IC.headphones;
+
+    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+      <div class="podcast-player" id="ppCard">
+        <div class="pp-header">
+          <div class="pp-art" style="background:${p.bgLight}">${iconHTML}</div>
+          <div>
+            <div class="pp-title">${p.title}</div>
+            <div class="pp-meta">${p.lang} \u2022 ${p.topic}</div>
+            <div class="pp-episode" style="color:${p.color}">Episode ${p.episodes} \u2022 Today, 5:00 AM</div>
+          </div>
+        </div>
+        <div class="np-progress">
+          <div class="np-bar-bg"><div class="np-bar-fill" id="ppBar" style="width:0%;background:${p.color}"></div></div>
+          <div class="np-time"><span id="ppTimeCur">0:00</span><span id="ppTimeDur">${p.duration}</span></div>
+        </div>
+        <div class="np-controls" style="margin-top:12px">
+          <button class="ctrl-btn">${IC.skipPrev}</button>
+          <button class="ctrl-btn-main" id="ppPlayBtn" onclick="togglePodcast()" style="background:${p.color}">${IC.play}</button>
+          <button class="ctrl-btn">${IC.skipNext}</button>
+        </div>
+      </div>
+
+      <div id="qaArea" class="qa-section mt-8 hidden">
+        <button class="qa-trigger" onclick="podcastAskQuestion()" id="qaTrigger">
+          ${IC.mic}<span>Ask a question about what you\u2019re hearing</span>
+        </button>
+      </div>
+
+      <div class="quick-cmds mt-12">
+        <button class="qc-chip" onclick="podcastAskQuestion()">Ask about this episode</button>
+        <button class="qc-chip" onclick="podcastSaveEpisode()">Save episode</button>
+        <button class="qc-chip" onclick="podcastMoreLikeThis()">More like this</button>
+        <button class="qc-chip" onclick="backToPodcastList()">Back to list</button>
+      </div>
+
+      ${FEEDBACK_HTML}
+    </div></div>`);
+  }, 800);
+}
+
+function togglePodcast() {
+  podcastPlaying = !podcastPlaying;
+  const btn = document.getElementById('ppPlayBtn');
+  if (btn) btn.innerHTML = podcastPlaying ? IC.pause : IC.play;
+
+  if (podcastPlaying) {
+    podcastInterval = setInterval(() => {
+      podcastProgress += 0.3;
+      const bar = document.getElementById('ppBar');
+      const cur = document.getElementById('ppTimeCur');
+      if (bar) bar.style.width = podcastProgress + '%';
+      if (cur) cur.textContent = fmtTime(podcastProgress * 6);
+
+      if (podcastProgress > 25 && !window._podcastQaNudgeSent) {
+        window._podcastQaNudgeSent = true;
+        const qa = document.getElementById('qaArea');
+        if (qa) qa.classList.remove('hidden');
+        setTimeout(() => {
+          addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+            <div class="ai-text"><p>You're about a quarter through. Have a question so far?</p></div>
+            <div class="quick-cmds mt-8">
+              <button class="qc-chip" onclick="podcastAskQuestion()">Ask about this episode</button>
+              <button class="qc-chip" onclick="podcastMoreLikeThis()">Show similar podcasts</button>
+              <button class="qc-chip" onclick="void(0)">Keep listening</button>
+            </div>
+          </div></div>`);
+        }, 400);
+      }
+
+      if (podcastProgress >= 100) {
+        podcastPlaying = false;
+        clearInterval(podcastInterval);
+        if (btn) btn.innerHTML = IC.play;
+      }
+    }, 100);
+  } else {
+    clearInterval(podcastInterval);
+  }
+}
+
+const podcastQABank = {
+  spiritual: {
+    q: ["What does this couplet mean?", "How do I apply this today?", "Tell me the next verse"],
+    a: [
+      "This kural speaks about gratitude — 'Katankol' means the virtue of acknowledging help received. In modern terms: when a colleague backs you in a tough meeting, publicly recognising that builds trust that money can't buy.",
+      "Start small: once a day, text one person who helped you this week. 'Thanks for that intro last Tuesday — it led somewhere.' That's Thiruvalluvar's lesson in one message.",
+      "The next couplet says: 'Even if the ocean dried up, the world would still need rain.' Meaning — resources reset, but relationships don't. Tune in tomorrow for the full breakdown."
+    ]
+  },
+  finance: {
+    q: ["What's the SIP tip for today?", "Is this safe for beginners?", "How much should I start with?"],
+    a: [
+      "Today's tip: ₹500/month SIP in a Nifty index fund for 20 years grows to roughly ₹49 lakhs at historical 12% returns. The magic is the compounding in years 15–20, not the early years.",
+      "Index funds are considered low-risk for long-term goals. No stock-picking needed — you own a slice of India's top 50 companies. Risk is real but spread out over time.",
+      "Finance experts suggest starting with whatever you won't miss — even ₹100/month builds the habit. Increase by ₹500 every year. By year 5 you're investing ₹3,000/month without feeling it."
+    ]
+  },
+  news: {
+    q: ["What's the top story today?", "Tell me more about the 2nd story", "Any good news?"],
+    a: [
+      "Top story: Jio 5G rollout has reached 450 tier-3 cities this quarter — that's 60 million new high-speed users. The government's Digital India push is ahead of schedule by 8 months.",
+      "Story 2: SEBI approved new green bond regulations — companies can now raise funds specifically for solar and EV infrastructure. ₹12,000 crore expected to be raised in Q1.",
+      "Good news segment: A Pune school student's AI-powered braille reader won the UN Youth Innovation Award. Her device costs ₹800 to make. A manufacturer has agreed to scale it."
+    ]
+  },
+  health: {
+    q: ["What's the diet tip for today?", "Is this medically reviewed?", "Give me a simple action step"],
+    a: [
+      "Today's focus: replacing white rice with foxtail millet (thinai) for 2 meals a week can reduce post-meal blood sugar spikes by up to 28% in Type 2 patients. Start with khichdi — it's the easiest swap.",
+      "Yes — all Sehat ki Baat content is reviewed by a registered dietitian before publishing. We follow ICMR guidelines. This is educational, not a prescription.",
+      "Action step: Tonight, swap your evening rice with 50g of jowar rotis. That's it. One meal. Note how you feel at 9 PM. Most people report less drowsiness within 2 weeks of this switch."
+    ]
+  },
+  default: {
+    q: ["What's the main takeaway?", "Who hosts this?", "Can I get a summary?"],
+    a: [
+      "The main insight from today's episode is about consistency over intensity — showing up daily for 10 minutes beats a 2-hour session once a week. The compound effect is real.",
+      "This JioBharatIQ Original is hosted by domain experts curated for Bharat's unique context — not recycled international content. Hindi and regional languages first.",
+      "Here's your 30-second summary: 1 core idea, 2 practical tips, 1 question to reflect on. Tune in tomorrow for the next episode — same time, 5 AM."
+    ]
+  }
+};
+
+function podcastAskQuestion() {
+  if (!selectedPodcast) return;
+  const topic = selectedPodcast.topic.toLowerCase();
+  const bank = podcastQABank[topic] || podcastQABank.default;
+  const chips = bank.q.map((q, i) =>
+    `<button class="voice-hint-chip" onclick="submitPodcastQuestion(${i})" style="font-size:12px;">"${q}"</button>`
+  ).join('');
+
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.id = 'podcastQARow';
+  row.innerHTML = `
+    ${AVATAR_HTML}
+    <div style="flex:1;">
+      <div class="voice-inline-card">
+        <div class="vic-mic-wrap">
+          <div class="vic-mic-ring" style="border-color:${selectedPodcast.color}">
+            <button class="vic-mic-btn" style="background:${selectedPodcast.color}">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z" fill="white"/></svg>
+            </button>
+          </div>
+          <div class="vic-status">Ask the host</div>
+          <div class="vic-sub">Tap a question or type your own</div>
+        </div>
+        <div class="vic-hint-label">Suggested questions</div>
+        <div class="vic-hints-wrap">${chips}</div>
+        <button class="vic-cancel-btn" onclick="document.getElementById('podcastQARow').remove()">Cancel</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('chatFlow').appendChild(row);
+  scrollToBottom();
+}
+
+function submitPodcastQuestion(idx) {
+  const qaRow = document.getElementById('podcastQARow');
+  if (qaRow) qaRow.remove();
+
+  const topic = (selectedPodcast && selectedPodcast.topic.toLowerCase()) || 'default';
+  const bank = podcastQABank[topic] || podcastQABank.default;
+  const question = bank.q[idx] || bank.q[0];
+  const answer = bank.a[idx] || bank.a[0];
+
+  // User bubble
+  const userRow = document.createElement('div');
+  userRow.className = 'msg-row user';
+  userRow.innerHTML = `<div class="bubble bubble-user" style="display:flex;align-items:center;gap:6px;">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.75;flex-shrink:0"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+    <span>${question}</span>
+  </div>`;
+  document.getElementById('chatFlow').appendChild(userRow);
+  scrollToBottom();
+
+  addTypingIndicator();
+  setTimeout(() => {
+    removeTypingIndicator();
+    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+      <div class="ai-text"><p>${answer}</p></div>
+      <div class="quick-cmds mt-8">
+        <button class="qc-chip" onclick="podcastAskQuestion()">Ask another question</button>
+        <button class="qc-chip" onclick="podcastMoreLikeThis()">More like this</button>
+        <button class="qc-chip" onclick="backToPodcastList()">Back to list</button>
+      </div>
+      ${FEEDBACK_HTML}
+    </div></div>`);
+  }, 900);
+}
+
+function podcastSaveEpisode() {
+  addMsg(`<div class="user-msg"><div class="user-bubble">Save episode</div></div>`);
+  setTimeout(() => {
+    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+      <div class="ai-text"><p>Saved to your library! You can listen offline anytime. I'll also remind you of the next episode tomorrow at 5 AM.</p></div>
+      <div class="quick-cmds mt-8">
+        <button class="qc-chip" onclick="podcastAskQuestion()">Ask about this episode</button>
+        <button class="qc-chip" onclick="podcastMoreLikeThis()">More like this</button>
+        <button class="qc-chip" onclick="backToPodcastList()">Explore all podcasts</button>
+      </div>
+      ${FEEDBACK_HTML}
+    </div></div>`);
+  }, 700);
+}
+
+function podcastMoreLikeThis() {
+  if (!selectedPodcast) return;
+  addMsg(`<div class="user-msg"><div class="user-bubble">More like this</div></div>`);
+  setTimeout(() => {
+    const similar = podcastsData.filter(p => p.id !== selectedPodcast.id && (p.topic === selectedPodcast.topic || p.lang === selectedPodcast.lang)).slice(0, 3);
+    const cards = similar.map(p => {
+      const iconHTML = IC[p.icon] ? IC[p.icon].replace('viewBox', `style="fill:${p.color};width:22px;height:22px" viewBox`) : IC.headphones;
+      return `<div class="podcast-card" onclick="openPodcast(${p.id})">
+        <div class="podcast-icon" style="background:${p.bgLight}">${iconHTML}</div>
+        <div class="podcast-info">
+          <div class="podcast-title">${p.title}</div>
+          <div class="podcast-meta">${p.lang} \u2022 ${p.topic} \u2022 ${p.duration}</div>
+        </div>
+        <div class="podcast-arrow">${IC.chevronR}</div>
+      </div>`;
+    }).join('');
+    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+      <div class="ai-text"><p>Based on <strong>${selectedPodcast.title}</strong>, here are similar shows you'd like:</p></div>
+      <div class="gap-8 mt-8">${cards || '<p style="color:var(--grey-60);font-size:13px;">No similar podcasts found — try exploring all categories.</p>'}</div>
+      ${FEEDBACK_HTML}
+    </div></div>`);
+  }, 800);
+}
+
+function backToPodcastList() {
+  if (podcastInterval) clearInterval(podcastInterval);
+  podcastPlaying = false;
+  renderPodcastList('All');
+}
+
+// ── Init ──
+// No renderPrompts on init — prompts show only after user picks "Tell me in your own words"
+</script>
+</body>
+</html>
