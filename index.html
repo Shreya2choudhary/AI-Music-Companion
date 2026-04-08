@@ -892,13 +892,40 @@ body { font-family: 'JioType', sans-serif; background: var(--white); }
 .rj-badge-name { font-size: 12px; font-weight: 600; color: var(--text-high); }
 .rj-badge-time { font-size: 11px; color: var(--text-low); margin-left: auto; font-variant-numeric: tabular-nums; }
 
-/* Interlude */
-.interlude-card { background: var(--surface-minimal); border: 1px solid var(--stroke-minimal); border-radius: var(--shape-large); padding: 16px; }
-.interlude-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+/* Interlude — voice waveform style */
+.interlude-card { background: var(--surface-minimal); border: 1px solid var(--stroke-minimal); border-radius: var(--shape-large); padding: 14px 16px; }
+.interlude-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .interlude-header .il-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; animation: npPulse 2s infinite; }
 .interlude-header .il-label { font-size: 12px; font-weight: 700; color: var(--text-high); }
-.interlude-text { font-size: 13px; color: var(--text-high); line-height: 1.5; margin-bottom: 12px; }
-.interlude-actions { display: flex; gap: 8px; }
+.il-waveform {
+  display: flex; align-items: center; gap: 3px; height: 32px; padding: 4px 0;
+}
+.il-waveform .il-bar {
+  width: 3px; border-radius: 2px; animation: ilWave 1.2s ease-in-out infinite;
+}
+.il-waveform .il-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
+.il-waveform .il-bar:nth-child(2) { height: 70%; animation-delay: 0.1s; }
+.il-waveform .il-bar:nth-child(3) { height: 50%; animation-delay: 0.2s; }
+.il-waveform .il-bar:nth-child(4) { height: 90%; animation-delay: 0.15s; }
+.il-waveform .il-bar:nth-child(5) { height: 60%; animation-delay: 0.25s; }
+.il-waveform .il-bar:nth-child(6) { height: 80%; animation-delay: 0.05s; }
+.il-waveform .il-bar:nth-child(7) { height: 45%; animation-delay: 0.3s; }
+.il-waveform .il-bar:nth-child(8) { height: 65%; animation-delay: 0.12s; }
+.il-waveform .il-bar:nth-child(9) { height: 55%; animation-delay: 0.22s; }
+.il-waveform .il-bar:nth-child(10) { height: 75%; animation-delay: 0.08s; }
+.il-waveform .il-bar:nth-child(11) { height: 40%; animation-delay: 0.18s; }
+.il-waveform .il-bar:nth-child(12) { height: 85%; animation-delay: 0.28s; }
+.il-waveform .il-bar:nth-child(13) { height: 50%; animation-delay: 0.03s; }
+.il-waveform .il-bar:nth-child(14) { height: 70%; animation-delay: 0.13s; }
+.il-waveform .il-bar:nth-child(15) { height: 60%; animation-delay: 0.23s; }
+.il-waveform .il-bar:nth-child(16) { height: 45%; animation-delay: 0.33s; }
+.il-waveform.paused .il-bar { animation-play-state: paused; }
+@keyframes ilWave {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+.interlude-text { display: none; }
+.interlude-actions { display: none; }
 .il-btn-primary { padding: 10px 16px; border-radius: var(--shape-pill); border: none; color: white; font-family: 'JioType', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; }
 .il-btn-primary:active { opacity: 0.85; }
 .il-btn-secondary { padding: 10px 16px; border-radius: var(--shape-pill); border: 1px solid var(--stroke-minimal); background: var(--white); font-family: 'JioType', sans-serif; font-size: 13px; font-weight: 500; color: var(--text-high); cursor: pointer; }
@@ -1467,28 +1494,65 @@ function selectMainOption(el, option) {
     return;
   }
 
-  // User bubble
+  // Go straight to the UC — no redundant user bubble
   setTimeout(() => {
-    const userRow = document.createElement('div');
-    userRow.className = 'msg-row user';
-    userRow.innerHTML = `<div class="bubble bubble-user">${el.querySelector('span').textContent}</div>`;
-    document.getElementById('chatFlow').appendChild(userRow);
-    scrollToBottom();
-
     if (option === 'prompt') {
+      addTypingIndicator();
       setTimeout(() => {
-        addTypingIndicator();
-        setTimeout(() => {
-          removeTypingIndicator();
-          showPromptCards();
-        }, 700);
-      }, 300);
+        removeTypingIndicator();
+        showPromptCards();
+      }, 700);
     } else if (option === 'rj') {
-      setTimeout(() => showRJSelect(), 300);
+      showRJSelect();
     } else if (option === 'podcast') {
-      setTimeout(() => showPodcastList(), 300);
+      showPodcastList();
     }
   }, 200);
+}
+
+// ── Cross-UC navigation: "What's next?" menu ──
+function showExploreMenu() {
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.innerHTML = `
+    ${AVATAR_HTML}
+    <div style="flex:1;min-width:0;">
+      <div class="bubble bubble-ai" style="max-width:100%;">What would you like to do next?</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+        <button class="voice-hint-chip" onclick="navigateToUC('voice')" style="justify-content:flex-start;gap:8px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 15a3 3 0 003-3V5a3 3 0 00-6 0v7a3 3 0 003 3zm6-5a1 1 0 00-1 1v1a5 5 0 11-10 0v-1a1 1 0 10-2 0v1a7 7 0 1014 0v-1a1 1 0 00-1-1zm-3 10H9a1 1 0 000 2h6a1 1 0 000-2z"/></svg>
+          Play a Song
+        </button>
+        <button class="voice-hint-chip" onclick="navigateToUC('prompt')" style="justify-content:flex-start;gap:8px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M15 4H9a7 7 0 00-1 13.92V20a1.5 1.5 0 002.4 1.2l4.27-3.2H15a7 7 0 000-14zm-7 8a1 1 0 110-2 1 1 0 010 2zm4 0a1 1 0 110-2 1 1 0 010 2zm4 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+          Pick or Describe your Vibe
+        </button>
+        <button class="voice-hint-chip" onclick="navigateToUC('rj')" style="justify-content:flex-start;gap:8px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+          AI Personal RJ
+        </button>
+        <button class="voice-hint-chip" onclick="navigateToUC('podcast')" style="justify-content:flex-start;gap:8px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>
+          Podcast Factory
+        </button>
+      </div>
+    </div>
+  `;
+  document.getElementById('chatFlow').appendChild(row);
+  scrollToBottom();
+}
+
+function navigateToUC(option) {
+  if (option === 'voice') {
+    openVoiceInline();
+  } else if (option === 'prompt') {
+    addTypingIndicator();
+    setTimeout(() => { removeTypingIndicator(); showPromptCards(); }, 700);
+  } else if (option === 'rj') {
+    setTimeout(() => showRJSelect(), 300);
+  } else if (option === 'podcast') {
+    setTimeout(() => showPodcastList(), 300);
+  }
 }
 
 function showPromptCards() {
@@ -1724,52 +1788,41 @@ function selectPrompt(cardEl, promptData) {
     c.style.pointerEvents = 'none';
   });
 
-  // Add user bubble with the prompt text
+  // Go straight to curating — no redundant user bubble
   setTimeout(() => {
-    const userRow = document.createElement('div');
-    userRow.className = 'msg-row user';
-    userRow.innerHTML = `<div class="bubble bubble-user">${promptData.text}</div>`;
-    document.getElementById('chatFlow').appendChild(userRow);
-    scrollToBottom();
-
-    // AI typing then curating message
+    addTypingIndicator();
     setTimeout(() => {
-      addTypingIndicator();
-      setTimeout(() => {
-        removeTypingIndicator();
+      removeTypingIndicator();
 
-        // Show curating message with inline progress bar
-        const curateRow = document.createElement('div');
-        curateRow.className = 'msg-row';
-        curateRow.id = 'curatingRow';
-        curateRow.innerHTML = `
-          ${AVATAR_HTML}
-          <div style="flex:1;min-width:0;">
-            <div class="bubble bubble-ai" style="max-width:100%;">
-              <div style="font-weight:700;margin-bottom:6px;">Curating your playlist...</div>
-              <div style="font-size:12px;color:var(--text-low);margin-bottom:10px;">Analyzing mood, context & preferences</div>
-              <div style="height:4px;background:var(--grey-40);border-radius:2px;overflow:hidden;">
-                <div id="inlineCurateProgress" style="height:100%;width:0%;background:var(--sparkle);border-radius:2px;transition:width 2.5s ease-out;"></div>
-              </div>
+      // Show curating message with inline progress bar
+      const curateRow = document.createElement('div');
+      curateRow.className = 'msg-row';
+      curateRow.id = 'curatingRow';
+      curateRow.innerHTML = `
+        ${AVATAR_HTML}
+        <div style="flex:1;min-width:0;">
+          <div class="bubble bubble-ai" style="max-width:100%;">
+            <div style="font-weight:700;margin-bottom:6px;">Curating your playlist...</div>
+            <div style="font-size:12px;color:var(--text-low);margin-bottom:10px;">Analyzing mood, context & preferences</div>
+            <div style="height:4px;background:var(--grey-40);border-radius:2px;overflow:hidden;">
+              <div id="inlineCurateProgress" style="height:100%;width:0%;background:var(--sparkle);border-radius:2px;transition:width 2.5s ease-out;"></div>
             </div>
           </div>
-        `;
-        document.getElementById('chatFlow').appendChild(curateRow);
-        scrollToBottom();
+        </div>
+      `;
+      document.getElementById('chatFlow').appendChild(curateRow);
+      scrollToBottom();
 
-        // Animate progress
-        setTimeout(() => {
-          document.getElementById('inlineCurateProgress').style.width = '100%';
-        }, 100);
+      setTimeout(() => {
+        document.getElementById('inlineCurateProgress').style.width = '100%';
+      }, 100);
 
-        // After curating, replace with inline playlist card
-        setTimeout(() => {
-          const row = document.getElementById('curatingRow');
-          if (row) row.remove();
-          showInlinePlaylist(promptData);
-        }, 3000);
-      }, 900);
-    }, 300);
+      setTimeout(() => {
+        const row = document.getElementById('curatingRow');
+        if (row) row.remove();
+        showInlinePlaylist(promptData);
+      }, 3000);
+    }, 700);
   }, 250);
 }
 
@@ -1862,6 +1915,7 @@ function showInlinePlaylist(promptData) {
         <button class="voice-hint-chip" onclick="handleIplChip('upbeat')">Make it more upbeat</button>
         <button class="voice-hint-chip" onclick="handleIplChip('arijit')">Add more Arijit songs</button>
         <button class="voice-hint-chip" onclick="handleIplChip('save')">Save this playlist</button>
+        <button class="voice-hint-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);">Explore more</button>
       </div>
     </div>
   `;
@@ -1938,7 +1992,7 @@ function handleIplChip(action) {
   const chipsWrap = document.getElementById('iplChipsWrap');
 
   if (action === 'save') {
-    // Show saved confirmation inline
+    // Just toggle the chip to "Saved!" — no user bubble, no AI response
     if (chipsWrap) {
       const saveBtn = [...chipsWrap.querySelectorAll('.voice-hint-chip')].find(b => b.textContent.includes('Save'));
       if (saveBtn) {
@@ -1948,44 +2002,13 @@ function handleIplChip(action) {
         saveBtn.style.pointerEvents = 'none';
       }
     }
-    // Add AI confirmation in chat
-    const userRow = document.createElement('div');
-    userRow.className = 'msg-row user';
-    userRow.innerHTML = '<div class="bubble bubble-user">Save this playlist</div>';
-    document.getElementById('chatFlow').appendChild(userRow);
-    scrollToBottom();
-    addTypingIndicator();
-    setTimeout(() => {
-      removeTypingIndicator();
-      // Custom AI response with playlist-aware chips
-      const saveAiRow = document.createElement('div');
-      saveAiRow.className = 'msg-row';
-      saveAiRow.innerHTML = `
-        ${AVATAR_HTML}
-        <div style="flex:1;min-width:0;">
-          <div class="bubble bubble-ai" style="max-width:100%;">Playlist saved to your JioSaavn library! You can find it under <strong>My Music</strong>.</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
-            <button class="voice-hint-chip" onclick="handlePostSaveChip('next')">Play next playlist</button>
-            <button class="voice-hint-chip" onclick="handlePostSaveChip('share')">Share with friends</button>
-          </div>
-        </div>
-      `;
-      document.getElementById('chatFlow').appendChild(saveAiRow);
-      scrollToBottom();
-    }, 600);
   }
 
   else if (action === 'arijit') {
-    // Add more Arijit songs to the existing playlist
-    const userRow = document.createElement('div');
-    userRow.className = 'msg-row user';
-    userRow.innerHTML = '<div class="bubble bubble-user">Add more Arijit songs</div>';
-    document.getElementById('chatFlow').appendChild(userRow);
-    scrollToBottom();
+    // Add more Arijit songs directly — no user bubble
     addTypingIndicator();
     setTimeout(() => {
       removeTypingIndicator();
-      // Append new Arijit tracks to the track list
       const newTracks = [
         { title:'Gerua', artist:'Arijit Singh', dur:'5:06', img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=200&h=200&fit=crop&auto=format' },
         { title:'Hawayein', artist:'Arijit Singh', dur:'4:52', img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop&auto=format' },
@@ -2027,12 +2050,7 @@ function handleIplChip(action) {
   }
 
   else if (action === 'upbeat') {
-    // Swap playlist tracks to upbeat versions
-    const userRow = document.createElement('div');
-    userRow.className = 'msg-row user';
-    userRow.innerHTML = '<div class="bubble bubble-user">Make it more upbeat</div>';
-    document.getElementById('chatFlow').appendChild(userRow);
-    scrollToBottom();
+    // Swap playlist directly — no user bubble
     addTypingIndicator();
     setTimeout(() => {
       removeTypingIndicator();
@@ -2053,12 +2071,6 @@ function handleIplChip(action) {
 // ── Post-save chip handlers ──
 function handlePostSaveChip(action) {
   if (action === 'next') {
-    // Show user bubble
-    const userRow = document.createElement('div');
-    userRow.className = 'msg-row user';
-    userRow.innerHTML = '<div class="bubble bubble-user">Play next playlist</div>';
-    document.getElementById('chatFlow').appendChild(userRow);
-    scrollToBottom();
     addTypingIndicator();
     setTimeout(() => {
       removeTypingIndicator();
@@ -2074,11 +2086,6 @@ function handlePostSaveChip(action) {
   }
 
   else if (action === 'share') {
-    const userRow = document.createElement('div');
-    userRow.className = 'msg-row user';
-    userRow.innerHTML = '<div class="bubble bubble-user">Share with friends</div>';
-    document.getElementById('chatFlow').appendChild(userRow);
-    scrollToBottom();
     addTypingIndicator();
     setTimeout(() => {
       removeTypingIndicator();
@@ -2432,28 +2439,18 @@ function cancelVoiceInline() {
 }
 
 // Handles a command from the inline listening card or hint chips below the player.
-// Adds a user bubble first so it reads as part of the conversation.
+// Goes straight to action — no redundant user bubble.
 function inlineVoiceCommand(command) {
   // Dismiss the listening card if visible
   const inlineRow = document.getElementById('voiceInlineCardRow');
   if (inlineRow) inlineRow.remove();
 
-  // Show command as a user message with a mic icon
-  const userRow = document.createElement('div');
-  userRow.className = 'msg-row user';
-  userRow.innerHTML = `<div class="bubble bubble-user" style="display:flex;align-items:center;gap:6px;">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.75;flex-shrink:0"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
-    <span>${command}</span>
-  </div>`;
-  document.getElementById('chatFlow').appendChild(userRow);
-  scrollToBottom();
-
-  // Brief thinking pause then process (bypass executeVoiceCommand's own bubble)
+  // Go straight to processing — no user echo bubble
   addTypingIndicator();
   setTimeout(() => {
     removeTypingIndicator();
     processVoiceCommand(command);
-  }, 650);
+  }, 400);
 }
 
 function openVoiceOverlay() {
@@ -2736,6 +2733,7 @@ function renderVoiceNowPlaying(song, aiMessage, chips) {
       ${chipsHtml ? `
         <div id="vnpChipsWrap" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;">
           ${chipsHtml}
+          <button class="voice-hint-chip" onclick="showExploreMenu()" style="background:var(--primary-20);color:var(--primary);">Explore more</button>
         </div>
       ` : ''}
     </div><!-- end flex wrapper -->
@@ -2903,9 +2901,9 @@ const rjPlaylist = [
 ];
 
 const interludes = [
-  { text: "That was Arijit Singh \u2014 did you know he recorded \u2018Tum Hi Ho\u2019 in a single take? The director wanted raw emotion, and Arijit delivered without a retake. Speaking of new releases, Arijit dropped a new album this Friday. Want to hear it?", cta: 'Haan, sunao!' },
-  { text: "I noticed you\u2019ve been playing romantic tracks this evening, Shreya. Tuesday nights are your Sufi zone \u2014 should I switch to that?", cta: 'Switch to Sufi' },
-  { text: "Shreya, you have a song dedication! Meera dedicated \u2018Tere Bina\u2019 to you today. Here it is\u2026", cta: 'Play dedication' },
+  { text: "That was Arijit Singh \u2014 did you know he recorded \u2018Tum Hi Ho\u2019 in a single take? The director wanted raw emotion, and Arijit delivered without a retake. Speaking of new releases, Arijit dropped a new album this Friday. Want to hear it?", cta: 'Haan, sunao!', audio: 'rj-interlude-1.mp3' },
+  { text: "I noticed you\u2019ve been playing romantic tracks this evening, Shreya. Tuesday nights are your Sufi zone \u2014 should I switch to that?", cta: 'Switch to Sufi', audio: 'rj-interlude-2.mp3' },
+  { text: "Shreya, you have a song dedication! Meera dedicated \u2018Tere Bina\u2019 to you today. Here it is\u2026", cta: 'Play dedication', audio: 'rj-interlude-3.mp3' },
 ];
 
 const podcastsData = [
@@ -3135,26 +3133,37 @@ function updateSongDisplay() {
 
 function showInterlude() {
   const il = interludes[currentSong % interludes.length];
+  const bars = Array.from({length: 16}, () => `<div class="il-bar" style="background:${selectedPersona.color}"></div>`).join('');
 
-  addMsg(`<div class="thinking-row rj-thinking-row">${MINI_AVATAR_HTML}<span class="thinking-text">RJ ${selectedPersona.name} is speaking\u2026</span></div>`);
-
-  setTimeout(() => {
-    document.querySelectorAll('.rj-thinking-row').forEach(e => e.remove());
-
-    addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
-      <div class="interlude-card">
-        <div class="interlude-header">
-          <div class="il-dot" style="background:${selectedPersona.color}"></div>
-          <span class="il-label">RJ ${selectedPersona.name} says:</span>
-        </div>
-        <div class="interlude-text">${il.text}</div>
-        <div class="interlude-actions">
-          <button class="il-btn-primary" onclick="rjInterludeAction('${il.cta}')" style="background:${selectedPersona.color}">${il.cta}</button>
-          <button class="il-btn-secondary" onclick="rjInterludeAction('Skip, next song')">Skip</button>
-        </div>
+  addMsg(`<div class="ai-msg">${AVATAR_HTML}<div class="ai-content">
+    <div class="interlude-card" id="rjInterludeCard">
+      <div class="interlude-header">
+        <div class="il-dot" style="background:${selectedPersona.color}"></div>
+        <span class="il-label">RJ ${selectedPersona.name} says:</span>
       </div>
-    </div></div>`);
-  }, 1200);
+      <div class="il-waveform" id="rjWaveform">
+        ${bars}
+      </div>
+    </div>
+  </div></div>`);
+
+  // Play the audio
+  if (il.audio) {
+    if (window._rjAudio) { window._rjAudio.pause(); window._rjAudio = null; }
+    const audio = new Audio(il.audio);
+    window._rjAudio = audio;
+    audio.play().catch(() => {});
+    audio.onended = () => {
+      // Stop waveform animation when audio ends
+      const wf = document.getElementById('rjWaveform');
+      if (wf) wf.classList.add('paused');
+      // Auto-advance to next song after brief pause
+      setTimeout(() => dismissInterlude(), 1500);
+    };
+  } else {
+    // No audio — auto-dismiss after 5s
+    setTimeout(() => dismissInterlude(), 5000);
+  }
 }
 
 function dismissInterlude() {
